@@ -36,6 +36,7 @@
 		22B514672B3F4FE900A6A5CD /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		22B5146B2B3F6A2000A6A5CD /* ResultsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultsView.swift; sourceTree = "<group>"; };
 		22D39F9E2B3A7331000A0E93 /* AnswerButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnswerButton.swift; sourceTree = "<group>"; };
+		22DE2CFF2B8EAC6000746DEA /* ci_post_clone.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = ci_post_clone.sh; sourceTree = "<group>"; };
 		22FD9EE82B5AF3A00019DF19 /* StoredData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoredData.swift; sourceTree = "<group>"; };
 		22FD9EED2B5B61F20019DF19 /* Trivia-App-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "Trivia-App-Info.plist"; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
@@ -58,6 +59,7 @@
 		224D85A92B3A05A000AFA4F3 = {
 			isa = PBXGroup;
 			children = (
+				22DE2CFE2B8EAC1D00746DEA /* ci_scripts */,
 				224D85B42B3A05A000AFA4F3 /* Trivia App */,
 				224D85B32B3A05A000AFA4F3 /* Products */,
 			);
@@ -104,6 +106,14 @@
 				22D39F9E2B3A7331000A0E93 /* AnswerButton.swift */,
 			);
 			path = Buttons;
+			sourceTree = "<group>";
+		};
+		22DE2CFE2B8EAC1D00746DEA /* ci_scripts */ = {
+			isa = PBXGroup;
+			children = (
+				22DE2CFF2B8EAC6000746DEA /* ci_post_clone.sh */,
+			);
+			path = ci_scripts;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
