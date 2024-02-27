@@ -16,7 +16,6 @@
 		224D85BD2B3A05A100AFA4F3 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 224D85BC2B3A05A100AFA4F3 /* Preview Assets.xcassets */; };
 		224D85C42B3A05BA00AFA4F3 /* QuestionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 224D85C32B3A05BA00AFA4F3 /* QuestionsView.swift */; };
 		224D85C72B3A05EA00AFA4F3 /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = 224D85C62B3A05EA00AFA4F3 /* ComposableArchitecture */; };
-		224D85CA2B3A23EE00AFA4F3 /* Themeing in Frameworks */ = {isa = PBXBuildFile; productRef = 224D85C92B3A23EE00AFA4F3 /* Themeing */; };
 		22B514682B3F4FE900A6A5CD /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22B514672B3F4FE900A6A5CD /* HomeView.swift */; };
 		22B5146C2B3F6A2000A6A5CD /* ResultsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22B5146B2B3F6A2000A6A5CD /* ResultsView.swift */; };
 		22D39F9F2B3A7331000A0E93 /* AnswerButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D39F9E2B3A7331000A0E93 /* AnswerButton.swift */; };
@@ -49,7 +48,6 @@
 				223129032B844068009B03EF /* GoogleMobileAds in Frameworks */,
 				224D85C72B3A05EA00AFA4F3 /* ComposableArchitecture in Frameworks */,
 				22FD9EEC2B5B61040019DF19 /* VungleAdsSDK in Frameworks */,
-				224D85CA2B3A23EE00AFA4F3 /* Themeing in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -134,7 +132,6 @@
 			name = "Time Crunch Trivia";
 			packageProductDependencies = (
 				224D85C62B3A05EA00AFA4F3 /* ComposableArchitecture */,
-				224D85C92B3A23EE00AFA4F3 /* Themeing */,
 				22FD9EEB2B5B61040019DF19 /* VungleAdsSDK */,
 				223129022B844068009B03EF /* GoogleMobileAds */,
 			);
@@ -453,10 +450,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 224D85C52B3A05EA00AFA4F3 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */;
 			productName = ComposableArchitecture;
-		};
-		224D85C92B3A23EE00AFA4F3 /* Themeing */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = Themeing;
 		};
 		22FD9EEB2B5B61040019DF19 /* VungleAdsSDK */ = {
 			isa = XCSwiftPackageProductDependency;
