@@ -27,7 +27,7 @@
 /* Begin PBXFileReference section */
 		220235A52B4F8F92006EFB71 /* CustomChallengeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomChallengeView.swift; sourceTree = "<group>"; };
 		2224C09D2B4E362800253AC3 /* CategoriesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoriesView.swift; sourceTree = "<group>"; };
-		224D85B22B3A05A000AFA4F3 /* Trivia App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Trivia App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		224D85B22B3A05A000AFA4F3 /* Time Crunch Trivia.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Time Crunch Trivia.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		224D85B52B3A05A000AFA4F3 /* Trivia_AppApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Trivia_AppApp.swift; sourceTree = "<group>"; };
 		224D85B72B3A05A000AFA4F3 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		224D85B92B3A05A100AFA4F3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -66,7 +66,7 @@
 		224D85B32B3A05A000AFA4F3 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				224D85B22B3A05A000AFA4F3 /* Trivia App.app */,
+				224D85B22B3A05A000AFA4F3 /* Time Crunch Trivia.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -109,9 +109,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		224D85B12B3A05A000AFA4F3 /* Trivia App */ = {
+		224D85B12B3A05A000AFA4F3 /* Time Crunch Trivia */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 224D85C02B3A05A100AFA4F3 /* Build configuration list for PBXNativeTarget "Trivia App" */;
+			buildConfigurationList = 224D85C02B3A05A100AFA4F3 /* Build configuration list for PBXNativeTarget "Time Crunch Trivia" */;
 			buildPhases = (
 				224D85AE2B3A05A000AFA4F3 /* Sources */,
 				224D85AF2B3A05A000AFA4F3 /* Frameworks */,
@@ -121,7 +121,7 @@
 			);
 			dependencies = (
 			);
-			name = "Trivia App";
+			name = "Time Crunch Trivia";
 			packageProductDependencies = (
 				224D85C62B3A05EA00AFA4F3 /* ComposableArchitecture */,
 				224D85C92B3A23EE00AFA4F3 /* Themeing */,
@@ -129,7 +129,7 @@
 				223129022B844068009B03EF /* GoogleMobileAds */,
 			);
 			productName = "Trivia App";
-			productReference = 224D85B22B3A05A000AFA4F3 /* Trivia App.app */;
+			productReference = 224D85B22B3A05A000AFA4F3 /* Time Crunch Trivia.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -147,7 +147,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 224D85AD2B3A05A000AFA4F3 /* Build configuration list for PBXProject "Trivia App" */;
+			buildConfigurationList = 224D85AD2B3A05A000AFA4F3 /* Build configuration list for PBXProject "Time Crunch Trivia" */;
 			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -166,7 +166,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				224D85B12B3A05A000AFA4F3 /* Trivia App */,
+				224D85B12B3A05A000AFA4F3 /* Time Crunch Trivia */,
 			);
 		};
 /* End PBXProject section */
@@ -387,7 +387,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		224D85AD2B3A05A000AFA4F3 /* Build configuration list for PBXProject "Trivia App" */ = {
+		224D85AD2B3A05A000AFA4F3 /* Build configuration list for PBXProject "Time Crunch Trivia" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				224D85BE2B3A05A100AFA4F3 /* Debug */,
@@ -396,7 +396,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		224D85C02B3A05A100AFA4F3 /* Build configuration list for PBXNativeTarget "Trivia App" */ = {
+		224D85C02B3A05A100AFA4F3 /* Build configuration list for PBXNativeTarget "Time Crunch Trivia" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				224D85C12B3A05A100AFA4F3 /* Debug */,
