@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 60;
+	objectVersion = 56;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -158,7 +158,6 @@
 			mainGroup = 224D85A92B3A05A000AFA4F3;
 			packageReferences = (
 				224D85C52B3A05EA00AFA4F3 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */,
-				224D85C82B3A23EE00AFA4F3 /* XCLocalSwiftPackageReference "../Themeing" */,
 				22FD9EEA2B5B61040019DF19 /* XCRemoteSwiftPackageReference "VungleAdsSDK-SwiftPackageManager" */,
 				223129012B844068009B03EF /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */,
 			);
@@ -406,13 +405,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCLocalSwiftPackageReference section */
-		224D85C82B3A23EE00AFA4F3 /* XCLocalSwiftPackageReference "../Themeing" */ = {
-			isa = XCLocalSwiftPackageReference;
-			relativePath = ../Themeing;
-		};
-/* End XCLocalSwiftPackageReference section */
 
 /* Begin XCRemoteSwiftPackageReference section */
 		223129012B844068009B03EF /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */ = {
