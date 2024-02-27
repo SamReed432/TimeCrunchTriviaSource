@@ -9,7 +9,6 @@ import Foundation
 import SwiftUI
 import ComposableArchitecture
 import Combine
-import Themeing
 
 private var configURL = URL(string: "https://the-trivia-api.com/v2/questions")!
 
