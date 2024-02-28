@@ -16,7 +16,7 @@ public struct CustomChallengeView: View {
     @State private var selectedMinutes = 1
     @State private var selectedSeconds = 00
     
-    @Environment(\.dismiss) private var dismiss
+   // @Environment(\.dismiss) private var dismiss
     
     public var currCat: String
     
@@ -106,17 +106,18 @@ public struct CustomChallengeView: View {
             
             HStack {
                 
-                Spacer()
-                
-                Button {
-                    dismiss()
-                } label: {
-                    Image(systemName: "chevron.backward")
-                        .foregroundStyle(Color(.white))
-                        .font(.largeTitle)
-                        .fontWeight(.bold)
-                        .padding(.bottom, 7)
-                }
+// CODE FOR BACK BUTTON BREAKS TIMERS (BUG)
+//                Spacer()
+//                
+//                Button {
+//                    dismiss()
+//                } label: {
+//                    Image(systemName: "chevron.backward")
+//                        .foregroundStyle(Color(.white))
+//                        .font(.largeTitle)
+//                        .fontWeight(.bold)
+//                        .padding(.bottom, 7)
+//                }
                 
                 Spacer()
                 
