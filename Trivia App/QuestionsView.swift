@@ -75,6 +75,7 @@ public struct QuestionsModel {
         public var emojiString = ""
         public var isAnimationInProgress = false
         public var shareString = ""
+        public var maxQs = -1
         
         public var gameRunning: Bool = false
         
@@ -100,9 +101,9 @@ public struct QuestionsModel {
             self.daily = daily
             self.category = category
             
-//            if (category != "") {
-//                configURL =
-//            }
+            if (daily) {
+                self.maxQs = 10
+            }
         }
     }
     
@@ -263,6 +264,13 @@ public struct QuestionsModel {
                     .cancellable(id: Identifiers.fetchCancellable)
                 
                 case .setNextQuestion:
+                    //Case where daily cat and reached 10 qs
+                    if (state.maxQs != -1 && state.qNum >= state.maxQs) {
+                        return Effect.run { send in
+                            await send(.stopTimer)
+                        }
+                    }
+                
                     let question = state.savedQuestions.first
                     if (state.savedQuestions.count > 0){
                         state.savedQuestions.removeFirst()
@@ -430,6 +438,8 @@ public struct QuestionsView: View {
                 Text("TriviaTime")
                     .frame(width: 120)
                     .font(.custom("Arial Rounded MT Bold", size: 20))
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.1)
                 Spacer()
                 
                 Image("clock")
@@ -442,10 +452,15 @@ public struct QuestionsView: View {
                 if (viewStore.state.remainingTime > 60){
                     Text("\(formattedMinutes(from: viewStore.state.remainingTime)):\(formattedSeconds(from: viewStore.state.remainingTime))")
                         .frame(width: 120)
+                        .font(.custom("Arial Rounded MT Bold", size: 20))
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.1)
                 } else {
                     Text("\(viewStore.state.remainingTime)")
                         .frame(width: 120)
-                        .font(.custom("Arial Rounded MT Bold", size: 30))
+                        .font(.custom("Arial Rounded MT Bold", size: 20))
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.1)
                 }
                 Spacer()
             }

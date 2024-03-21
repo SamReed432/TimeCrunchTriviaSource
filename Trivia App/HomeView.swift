@@ -88,38 +88,6 @@ public struct HomeView: View {
                     
                     HStack{
                         Spacer()
-                        Button(action: {
-                            viewStore.send(.stopTimer)
-                            views.stacked = true
-                        }) {
-                            Text("Play 1 Minute Challenge")
-                                .font(.custom("Helvetica Neue", size: 23).weight(.bold))
-                                .fontWeight(.bold)
-                                .foregroundColor(.white)
-                                .frame(maxWidth: 0.9 * g.size.width)
-                                .padding(.vertical, 20)
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 15)
-                                        .stroke(Color.white, lineWidth: 4.0)
-                                )
-                                .background(Color("accent").opacity(0.52))
-                                .clipShape(RoundedRectangle(cornerRadius: 15.0))
-                                .shadow(color: .black, radius: 4, x: 0, y: 4)
-                        }
-                        .contentShape(RoundedRectangle(cornerRadius: 15.0))
-                        
-                        Spacer()
-                    }
-                    .navigationDestination(isPresented: $views.stacked) {
-                        QuestionsView(
-                            store: Store(initialState: QuestionsModel.State(totalTime: 60, daily: false, category: "")) {
-                                QuestionsModel()
-                            }
-                        )
-                    }
-                    
-                    HStack{
-                        Spacer()
                         
                         
                         let calendar = Calendar.current
@@ -155,6 +123,8 @@ public struct HomeView: View {
                                     .background(Color("accent").opacity(0.52))
                                     .clipShape(RoundedRectangle(cornerRadius: 15.0))
                                     .shadow(color: .black, radius: 4, x: 0, y: 4)
+                                    .lineLimit(1)
+                                    .minimumScaleFactor(0.5)
                             }
                             .contentShape(RoundedRectangle(cornerRadius: 15.0))
                         } else {
@@ -164,9 +134,9 @@ public struct HomeView: View {
                                     .onAppear {
                                         viewStore.send(.startTimer)
                                     }
-//                                    .onDisappear{
-//                                        viewStore.send(.stopTimer)
-//                                    }
+                                    .lineLimit(1)
+                                    .minimumScaleFactor(0.1)
+                                    .padding(.horizontal, 20)
                             }
                                 .font(.custom("Helvetica Neue", size: 20).weight(.bold))
                                 .fontWeight(.bold)
@@ -194,6 +164,41 @@ public struct HomeView: View {
                         )
                     }
                     
+                    HStack{
+                        Spacer()
+                        Button(action: {
+                            viewStore.send(.stopTimer)
+                            views.stacked = true
+                        }) {
+                            Text("Play 1 Minute Challenge")
+                                .font(.custom("Helvetica Neue", size: 23).weight(.bold))
+                                .fontWeight(.bold)
+                                .foregroundColor(.white)
+                                .frame(maxWidth: 0.9 * g.size.width)
+                                .padding(.vertical, 20)
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 15)
+                                        .stroke(Color.white, lineWidth: 4.0)
+                                )
+                                .background(Color("accent").opacity(0.52))
+                                .clipShape(RoundedRectangle(cornerRadius: 15.0))
+                                .shadow(color: .black, radius: 4, x: 0, y: 4)
+                                .lineLimit(1)
+                                .minimumScaleFactor(0.1)
+                        }
+                        .contentShape(RoundedRectangle(cornerRadius: 15.0))
+                        
+                        Spacer()
+                    }
+                    .navigationDestination(isPresented: $views.stacked) {
+                        QuestionsView(
+                            store: Store(initialState: QuestionsModel.State(totalTime: 60, daily: false, category: "")) {
+                                QuestionsModel()
+                            }
+                        )
+                    }
+                    
+                    
                     Spacer()
                     
                     HStack{
@@ -216,6 +221,8 @@ public struct HomeView: View {
                                 .background(Color(.white).opacity(0.10))
                                 .clipShape(RoundedRectangle(cornerRadius: 15.0))
                                 .shadow(color: .black, radius: 4, x: 0, y: 4)
+                                .lineLimit(1)
+                                .minimumScaleFactor(0.1)
                         }
                         .contentShape(RoundedRectangle(cornerRadius: 15.0))
                         

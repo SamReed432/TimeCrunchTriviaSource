@@ -59,6 +59,9 @@ public struct CategoriesView: View {
                             .font(.title)
                             .fontWeight(.bold)
                             .padding(.bottom, 7)
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.1)
+                        
                     }
                 }
 
@@ -68,6 +71,8 @@ public struct CategoriesView: View {
                     .foregroundStyle(Color(.white))
                     .padding(.bottom, 20)
                     .padding(.top, 10)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.1)
                 
                 Spacer()
             }
@@ -97,6 +102,8 @@ public struct CategoriesView: View {
                                 .clipShape(RoundedRectangle(cornerRadius: 15))
                                 .shadow(radius: 4.0, y: 5)
                                 .padding(.vertical, 5)
+                                .lineLimit(1)
+                                .minimumScaleFactor(0.1)
                             
                         })
                         .contentShape(RoundedRectangle(cornerRadius: 15.0))
