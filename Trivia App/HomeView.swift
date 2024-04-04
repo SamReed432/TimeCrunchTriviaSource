@@ -39,7 +39,7 @@ public struct HomeView: View {
                 let fetchedCatName = try await fetchDailyCat()
                 print("\(fetchedCatName)")
                 DispatchQueue.main.async {
-                    views.dailyCategory = fetchedCatName.capitalized
+                    views.dailyCategory = formatCategoryName(fetchedCatName.capitalized)
                 }
             } catch {
                 // Handle the error
@@ -64,10 +64,24 @@ public struct HomeView: View {
         }
         .navigationViewStyle(StackNavigationViewStyle())
         .environmentObject(views)
-        
-        .onAppear {
+    }
+    
+    func fetchDataAndUpdateViews() {
+        Task {
+            do {
+                let fetchedCatName = try await fetchDailyCat()
+                print("\(fetchedCatName)")
+                DispatchQueue.main.async {
+                    views.dailyCategory = formatCategoryName(fetchedCatName.capitalized)
+                }
+            } catch {
+                // Handle the error
+            }
         }
     }
+    
+    func refresh_daily() {
+        }
 
     func verticalContent(
         geometry g: GeometryProxy
@@ -127,6 +141,19 @@ public struct HomeView: View {
                                     .minimumScaleFactor(0.5)
                             }
                             .contentShape(RoundedRectangle(cornerRadius: 15.0))
+                            .onAppear {
+                                let _ = Task {
+                                    do {
+                                        let fetchedCatName = try await fetchDailyCat()
+                                        print("\(fetchedCatName)")
+                                        DispatchQueue.main.async {
+                                            views.dailyCategory = formatCategoryName(fetchedCatName.capitalized)
+                                        }
+                                    } catch {
+                                        // Handle the error
+                                    }
+                                }
+                            }
                         } else {
                             HStack {
                                 Text("New Daily Challenge: \(String(viewStore.totalTime / 3600)):\(String(format: "%02d", (viewStore.totalTime % 3600) / 60)):\(String(format: "%02d", viewStore.totalTime % 60))")
@@ -249,42 +276,6 @@ public struct HomeView: View {
         HStack {
         }
     }
-    
-//    private func calculateTimeRemaining() {
-//        let currentDate = Date()
-//        let calendar = Calendar.current
-//        let midnightESTDate = calendar.startOfDay(for: currentDate).addingTimeInterval(midnightEST)
-//
-//        if midnightESTDate > currentDate {
-//            timeRemaining = midnightESTDate.timeIntervalSince(currentDate)
-//        } else {
-//            // Daily challenge already reset for today
-//            timeRemaining = 0
-//        }
-//    }
-//
-//    private func formattedTime(_ time: TimeInterval) -> String {
-//        let hours = Int(time) / 3600
-//        let minutes = Int(time) / 60 % 60
-//        let seconds = Int(time) % 60
-//        return String(format: "%2d:%02d:%02d", hours, minutes, seconds)
-//    }
-//    
-//    private func startTimer() {
-//            timer = Timer.publish(every: 1.0, on: .main, in: .common)
-//                .autoconnect()
-//                .sink { _ in
-//                    if timeRemaining > 0 {
-//                        timeRemaining -= 1
-//                    } else {
-//                        calculateTimeRemaining()
-//                    }
-//                }
-//        }
-//
-//    private func stopTimer() {
-//        timer?.cancel()
-//    }
 }
 
 
@@ -294,7 +285,7 @@ struct catResponse: Decodable {
 
 
 func fetchDailyCat() async throws -> String {
-    let url = URL(string: "https://trivia-time-api-c4d7013f9357.herokuapp.com/dailyCat")!
+    let url = URL(string: "https://us-east-1.aws.data.mongodb-api.com/app/data-viaqs/endpoint/get_daily_cat")!
 
     let (data, _) = try await URLSession.shared.data(from: url)
 
@@ -310,15 +301,22 @@ func fetchDailyCat() async throws -> String {
 
 
 @Reducer
-public struct HomeViewModel {
+public struct HomeViewModel{
+    
     public struct State: Equatable, Codable {
         public var isRunningTimer: Bool
         public var totalTime: Int
+        public var dailyCategory = ""
         
         public init() {
             self.isRunningTimer = false
             self.totalTime = 0
         }
+    }
+    
+    public func fetchDailyCat() async throws -> String {
+            let fetchedCatName = try await fetchDailyCat()
+            return fetchedCatName.capitalized
     }
     
     private let midnightEST: TimeInterval = 24 * 60 * 60 // 24 hours
@@ -389,6 +387,13 @@ public struct HomeViewModel {
             }
         }
     }
+
+}
+
+func formatCategoryName(_ categoryName: String) -> String {
+    let components = categoryName.components(separatedBy: "_")
+    let formattedCategoryName = components.joined(separator: " ")
+    return formattedCategoryName
 }
 
 

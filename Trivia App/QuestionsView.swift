@@ -224,45 +224,45 @@ public struct QuestionsModel {
                 case .fetch:
                     state.isFetching = true
                     var apiUrlString = ""
-                if (state.daily) {
-                    apiUrlString = "https://trivia-time-api-c4d7013f9357.herokuapp.com/daily"
-                    print("\(apiUrlString)")
-                } else {
-                    apiUrlString = "https://the-trivia-api.com/v2/questions"
-                }
-                let category = state.category
-
-                if (category != ""){
-                    apiUrlString += "?categories=\(category)"
-                }
-                
-                print("\(apiUrlString)")
-                    
-                guard let apiUrl = URL(
-                    string: apiUrlString.replacingOccurrences(of: " ", with: "").lowercased()
-                ) else {
-                    // Handle invalid URL
-                    return .none
-                }
-
-                return Effect
-                    .publisher {
-                        URLSession
-                            .DataTaskPublisher(request: URLRequest(url: apiUrl), session: Self.session)
-                            .mapError { APIError.urlError(apiUrl, $0) }
-                            .tryMap (Self.validateHttpResponse)
-                            .mapError { $0 as! APIError }
-                            .decode(type: [TriviaQuestion].self, decoder: JSONDecoder())
-                            .replaceError(with: [defaultTrivia])
-                            .map { questions in
-                                withAnimation(.easeInOut(duration: 1)) {
-                                    return .appendSavedQuestions(questions)
-                                }
-                            }
-                            .receive(on: DispatchQueue.main)
+                    if (state.daily) {
+                        apiUrlString = "https://us-east-1.aws.data.mongodb-api.com/app/data-viaqs/endpoint/get_daily"
+                        print("\(apiUrlString)")
+                    } else {
+                        apiUrlString = "https://the-trivia-api.com/v2/questions"
                     }
-                    .cancellable(id: Identifiers.fetchCancellable)
-                
+                    let category = state.category
+
+                    if (category != ""){
+                        apiUrlString += "?categories=\(category)"
+                    }
+                    
+                    print("\(apiUrlString)")
+                        
+                    guard let apiUrl = URL(
+                        string: apiUrlString.replacingOccurrences(of: " ", with: "").lowercased()
+                    ) else {
+                        // Handle invalid URL
+                        return .none
+                    }
+
+                    return Effect
+                        .publisher {
+                            URLSession
+                                .DataTaskPublisher(request: URLRequest(url: apiUrl), session: Self.session)
+                                .mapError { APIError.urlError(apiUrl, $0) }
+                                .tryMap (Self.validateHttpResponse)
+                                .mapError { $0 as! APIError }
+                                .decode(type: [TriviaQuestion].self, decoder: JSONDecoder())
+                                .replaceError(with: [defaultTrivia])
+                                .map { questions in
+                                    withAnimation(.easeInOut(duration: 1)) {
+                                        return .appendSavedQuestions(questions)
+                                    }
+                                }
+                                .receive(on: DispatchQueue.main)
+                        }
+                        .cancellable(id: Identifiers.fetchCancellable)
+                    
                 case .setNextQuestion:
                     //Case where daily cat and reached 10 qs
                     if (state.maxQs != -1 && state.qNum >= state.maxQs) {
