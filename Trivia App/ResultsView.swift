@@ -51,9 +51,119 @@ public struct ResultsView: View {
         .navigationViewStyle(StackNavigationViewStyle())
         .navigationBarBackButtonHidden(true)
         .onAppear {
+                    requestNotificationPermissions()
+                    cancelNotificationIfNeeded()
+                    fetchTomorrowCategory()
                     loadInterstitialAd()
                 }
     }
+    
+    // Request notification permissions
+    func requestNotificationPermissions() {
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { granted, error in
+            if granted {
+                print("Notification permissions granted")
+            } else if let error = error {
+                print("Error requesting notification permissions: \(error.localizedDescription)")
+            }
+        }
+    }
+    
+    private func fetchTomorrowCategory() {
+        guard let url = URL(string: "https://us-east-1.aws.data.mongodb-api.com/app/data-viaqs/endpoint/get_tomorrow_cat") else {
+            print("Invalid URL")
+            return
+        }
+        
+        let task = URLSession.shared.dataTask(with: url) { data, response, error in
+            guard let data = data, error == nil else {
+                print("Failed to fetch tomorrow's category: \(error?.localizedDescription ?? "Unknown error")")
+                return
+            }
+            
+            if let tomorrowCategory = String(data: data, encoding: .utf8) {
+                // Remove surrounding quotations
+                let trimmedCategory = tomorrowCategory.trimmingCharacters(in: CharacterSet(charactersIn: "\""))
+                print("Tomorrow's category:", trimmedCategory)
+                scheduleNotificationForNextDay(category: trimmedCategory)
+            } else {
+                print("Failed to parse tomorrow's category")
+            }
+        }
+        
+        task.resume()
+    }
+
+        
+    private func scheduleNotificationForNextDay(category: String) {
+        // Calculate the date for the next day at 9 AM
+        let tomorrow = Calendar.current.date(byAdding: .day, value: 1, to: Date())!
+        var dateComponents = Calendar.current.dateComponents([.year, .month, .day], from: tomorrow)
+        dateComponents.hour = 9
+        dateComponents.minute = 0
+        dateComponents.second = 0
+        
+        let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: false)
+        
+        let content = UNMutableNotificationContent()
+        content.title = "A New Daily Challenge Is Waiting!"
+        content.body = "Today's category: \(category)"
+        content.sound = .default
+        
+        let request = UNNotificationRequest(identifier: "NextDayNotification", content: content, trigger: trigger)
+        
+        UNUserNotificationCenter.current().add(request) { error in
+            if let error = error {
+                print("Error scheduling notification for the next day: \(error.localizedDescription)")
+            }
+        }
+    }
+    
+    private func scheduleNotificationForSameDay(category: String) {
+        // Get the current date
+        let currentDate = Date()
+        
+        // Get the components of the current date
+        var dateComponents = Calendar.current.dateComponents([.year, .month, .day], from: currentDate)
+        
+        // Set the hour, minute, and second components for 10:05 PM
+        dateComponents.hour = 22 // 10 PM
+        dateComponents.minute = 10 // 05 minutes past the hour
+        dateComponents.second = 0
+        
+        // Create a trigger for the notification
+        let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: false)
+        
+        // Create the notification content
+        let content = UNMutableNotificationContent()
+        content.title = "A New Daily Challenge Is Waiting!"
+        content.body = "Today's category: \(category)"
+        content.sound = .default
+        
+        // Create the notification request
+        let request = UNNotificationRequest(identifier: "SameDayNotification", content: content, trigger: trigger)
+        
+        // Add the notification request to the notification center
+        UNUserNotificationCenter.current().add(request) { error in
+            if let error = error {
+                print("Error scheduling notification for the same day: \(error.localizedDescription)")
+            }
+        }
+    }
+
+    
+    private func cancelNotificationIfNeeded() {
+            let currentDate = Date()
+            let calendar = Calendar.current
+            let currentHour = calendar.component(.hour, from: currentDate)
+            
+            guard currentHour < 9 else {
+                UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: ["NextDayNotification"])
+                print("Notification canceled because the game was played before 9:00 AM.")
+                return
+            }
+        }
+
 
     func verticalContent(
         geometry g: GeometryProxy
@@ -111,11 +221,18 @@ public struct ResultsView: View {
                             self.views.categoriesStacked = false
                             self.views.customStacked = false
                             self.views.resultsViewShown = false
-                            
-                            if let interstitial = interstitial {
-                                interstitial.present(fromRootViewController: UIApplication.shared.windows.first?.rootViewController)
+
+                            if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+                               let window = windowScene.windows.first {
+                                if let rootViewController = window.rootViewController {
+                                    if let interstitial = interstitial {
+                                        interstitial.present(fromRootViewController: rootViewController)
+                                    } else {
+                                        print("Interstitial ad wasn't ready")
+                                    }
+                                }
                             } else {
-                                print("Interstitial ad wasn't ready")
+                                print("No window scene found")
                             }
                         }
                         .font(.system(size: 40))

@@ -226,7 +226,6 @@ public struct QuestionsModel {
                     var apiUrlString = ""
                     if (state.daily) {
                         apiUrlString = "https://us-east-1.aws.data.mongodb-api.com/app/data-viaqs/endpoint/get_daily"
-                        print("\(apiUrlString)")
                     } else {
                         apiUrlString = "https://the-trivia-api.com/v2/questions"
                     }
@@ -235,9 +234,7 @@ public struct QuestionsModel {
                     if (category != ""){
                         apiUrlString += "?categories=\(category)"
                     }
-                    
-                    print("\(apiUrlString)")
-                        
+                
                     guard let apiUrl = URL(
                         string: apiUrlString.replacingOccurrences(of: " ", with: "").lowercased()
                     ) else {
@@ -295,8 +292,6 @@ public struct QuestionsModel {
                     state.correctAnswerIndex = shuffledChoices.firstIndex(of: question!.correctAnswer) ?? 0
                 
                     state.isAnimationInProgress = false
-                
-                    //print(state.correctAnswerIndex)
                 
                     return .none
                 case .appendSavedQuestions(let questions):
@@ -386,15 +381,13 @@ public struct QuestionsView: View {
                             } else {
                                 self.horizontalContent(for: viewStore, geometry: g)
                             }
-                            NavigationLink(
-                                destination: ResultsView(
-                                    store: self.store,
-                                    shareString: viewStore.shareString
-                                ),
-                                isActive: viewStore.binding(get: \.showResults, send: { _ in .none }),
-                                label: { EmptyView() }
-                            )
                         }.background(Color.clear)
+                         .navigationDestination(isPresented: viewStore.binding(get: \.showResults, send: { _ in .none })) {
+                             ResultsView(
+                                 store: self.store,
+                                 shareString: viewStore.shareString
+                             )
+                            }
                     } else {
                         GeometryReader { g in
                             self.countDownView(for: viewStore, geometry: g)

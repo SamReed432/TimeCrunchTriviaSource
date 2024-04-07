@@ -30,8 +30,8 @@
             filePath = "Trivia App/HomeView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "91"
-            endingLineNumber = "91"
+            startingLineNumber = "89"
+            endingLineNumber = "89"
             landmarkName = "verticalContent(geometry:)"
             landmarkType = "7">
          </BreakpointContent>

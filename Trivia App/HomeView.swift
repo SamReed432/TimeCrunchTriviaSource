@@ -37,7 +37,6 @@ public struct HomeView: View {
         Task { [self] in
             do {
                 let fetchedCatName = try await fetchDailyCat()
-                print("\(fetchedCatName)")
                 DispatchQueue.main.async {
                     views.dailyCategory = formatCategoryName(fetchedCatName.capitalized)
                 }
@@ -70,7 +69,6 @@ public struct HomeView: View {
         Task {
             do {
                 let fetchedCatName = try await fetchDailyCat()
-                print("\(fetchedCatName)")
                 DispatchQueue.main.async {
                     views.dailyCategory = formatCategoryName(fetchedCatName.capitalized)
                 }
@@ -124,7 +122,7 @@ public struct HomeView: View {
                                 viewStore.send(.stopTimer)
                                 views.dailyStacked = true
                             }) {
-                                Text("Play The Daily Challenge : \(views.dailyCategory)")
+                                Text("Daily Challenge : \(views.dailyCategory)")
                                     .font(.custom("Helvetica Neue", size: 20).weight(.bold))
                                     .fontWeight(.bold)
                                     .foregroundColor(.white)
@@ -145,7 +143,6 @@ public struct HomeView: View {
                                 let _ = Task {
                                     do {
                                         let fetchedCatName = try await fetchDailyCat()
-                                        print("\(fetchedCatName)")
                                         DispatchQueue.main.async {
                                             views.dailyCategory = formatCategoryName(fetchedCatName.capitalized)
                                         }
@@ -313,12 +310,7 @@ public struct HomeViewModel{
             self.totalTime = 0
         }
     }
-    
-    public func fetchDailyCat() async throws -> String {
-            let fetchedCatName = try await fetchDailyCat()
-            return fetchedCatName.capitalized
-    }
-    
+
     private let midnightEST: TimeInterval = 24 * 60 * 60 // 24 hours
     
     public enum Action {
