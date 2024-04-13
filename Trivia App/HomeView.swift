@@ -123,7 +123,7 @@ public struct HomeView: View {
                                 views.dailyStacked = true
                             }) {
                                 Text("Daily Challenge : \(views.dailyCategory)")
-                                    .font(.custom("Helvetica Neue", size: 20).weight(.bold))
+                                    .font(.custom("Helvetica Neue", size: 300).weight(.bold))
                                     .fontWeight(.bold)
                                     .foregroundColor(.white)
                                     .frame(maxWidth: 0.9 * g.size.width)
@@ -136,7 +136,7 @@ public struct HomeView: View {
                                     .clipShape(RoundedRectangle(cornerRadius: 15.0))
                                     .shadow(color: .black, radius: 4, x: 0, y: 4)
                                     .lineLimit(1)
-                                    .minimumScaleFactor(0.5)
+                                    .minimumScaleFactor(0.01)
                             }
                             .contentShape(RoundedRectangle(cornerRadius: 15.0))
                             .onAppear {
@@ -159,8 +159,7 @@ public struct HomeView: View {
                                         viewStore.send(.startTimer)
                                     }
                                     .lineLimit(1)
-                                    .minimumScaleFactor(0.1)
-                                    .padding(.horizontal, 20)
+                                    .padding(.vertical, 20)
                             }
                                 .font(.custom("Helvetica Neue", size: 20).weight(.bold))
                                 .fontWeight(.bold)
@@ -182,7 +181,7 @@ public struct HomeView: View {
                     }
                     .navigationDestination(isPresented: $views.dailyStacked) {
                         QuestionsView(
-                            store: Store(initialState: QuestionsModel.State(totalTime: 60, daily: true, category: "")) {
+                            store: Store(initialState: QuestionsModel.State(totalTime: 60, daily: true, category: views.dailyCategory)) {
                                 QuestionsModel()
                             }
                         )
@@ -195,7 +194,7 @@ public struct HomeView: View {
                             views.stacked = true
                         }) {
                             Text("Play 1 Minute Challenge")
-                                .font(.custom("Helvetica Neue", size: 23).weight(.bold))
+                                .font(.custom("Helvetica Neue", size: 300).weight(.bold))
                                 .fontWeight(.bold)
                                 .foregroundColor(.white)
                                 .frame(maxWidth: 0.9 * g.size.width)
@@ -208,7 +207,7 @@ public struct HomeView: View {
                                 .clipShape(RoundedRectangle(cornerRadius: 15.0))
                                 .shadow(color: .black, radius: 4, x: 0, y: 4)
                                 .lineLimit(1)
-                                .minimumScaleFactor(0.1)
+                                .minimumScaleFactor(0.01)
                         }
                         .contentShape(RoundedRectangle(cornerRadius: 15.0))
                         

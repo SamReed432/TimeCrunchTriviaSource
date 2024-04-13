@@ -16,7 +16,7 @@ public struct CustomChallengeView: View {
     @State private var selectedMinutes = 1
     @State private var selectedSeconds = 00
     
-   // @Environment(\.dismiss) private var dismiss
+//    @Environment(\.dismiss) private var dismiss
     
     public var currCat: String
     
@@ -54,18 +54,24 @@ public struct CustomChallengeView: View {
             Spacer()
             
             Text("Custom")
-                .font(.custom("Helvetica Neue", size: 50).weight(.bold))
+                .font(.custom("Helvetica Neue", size: 300).weight(.bold))
+                .frame(width: g.size.width * 0.7)
                 .foregroundColor(Color.white)
+                .minimumScaleFactor(0.01)
             
             Text("Challenge")
-                .font(.custom("Helvetica Neue", size: 50).weight(.bold))
+                .font(.custom("Helvetica Neue", size: 300).weight(.bold))
+                .frame(width: g.size.width * 0.7)
                 .foregroundColor(Color.white)
+                .minimumScaleFactor(0.01)
             
             Spacer()
             
             Text("\(currCat)")
                 .font(.custom("Helvetica Neue", size: 60).weight(.bold))
                 .foregroundColor(Color("accent"))
+                .frame(width: g.size.width * 0.7)
+                .minimumScaleFactor(0.01)
             
             HStack (spacing: 0) {
                 
@@ -76,12 +82,14 @@ public struct CustomChallengeView: View {
                         Text("\(minute)")
                             .tag(minute)
                             .foregroundColor(.white)
-                            .font(.custom("Helvetica Neue", size: 40).weight(.bold))
+                            .font(.custom("Helvetica Neue", size: 300).weight(.bold))
+                            .frame(width: g.size.width * 0.2, height: g.size.height * 0.07)
+                            .minimumScaleFactor(0.01)
                             .padding(5)
                     }
                 }
                 .pickerStyle(WheelPickerStyle())
-                .frame(width: 100)
+                .frame(width: g.size.width * 0.3, height: g.size.height * 0.3)
                 
                 Text(":")
                     .foregroundColor(.white)
@@ -93,12 +101,14 @@ public struct CustomChallengeView: View {
                         Text("\(formattedSeconds(from: second))")
                             .tag(second)
                             .foregroundColor(.white)
-                            .font(.custom("Helvetica Neue", size: 40).weight(.bold))
+                            .font(.custom("Helvetica Neue", size: 300).weight(.bold))
+                            .frame(width: g.size.width * 0.2, height: g.size.height * 0.07)
+                            .minimumScaleFactor(0.01)
                             .padding(5)
                     }
                 }
                 .pickerStyle(WheelPickerStyle())
-                .frame(width: 100)
+                .frame(width: g.size.width * 0.3, height: g.size.height * 0.3)
                 
                 Spacer()
                 
@@ -130,7 +140,7 @@ public struct CustomChallengeView: View {
                 } label: {
                     Text("GO!")
                         .foregroundColor(.white)
-                        .font(.custom("Helvetica Neue", size: 40).weight(.bold))
+                        .font(.custom("Helvetica Neue", size: 300).weight(.bold))
                         .foregroundColor(.white)
                         .padding(12)
                         .frame(width: 200)
@@ -138,6 +148,7 @@ public struct CustomChallengeView: View {
                             RoundedRectangle(cornerRadius: 12.0)
                                 .stroke(Color.white.opacity(0.6), lineWidth: 3)
                         )
+                        .minimumScaleFactor(0.01)
                 }
                 
                 Spacer()

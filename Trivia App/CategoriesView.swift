@@ -55,24 +55,27 @@ public struct CategoriesView: View {
                         dismiss()
                     } label: {
                         Image(systemName: "chevron.backward")
+                            .font(.custom("Helvetica Neue", size: 30).weight(.bold))
+                            .frame(maxWidth: 0.3 * g.size.width)
                             .foregroundStyle(Color(.white))
-                            .font(.title)
-                            .fontWeight(.bold)
-                            .padding(.bottom, 7)
+                            .padding(.bottom, 20)
+                            .padding(.top, 10)
                             .lineLimit(1)
-                            .minimumScaleFactor(0.1)
+                            .minimumScaleFactor(0.01)
                         
                     }
                 }
 
                 
                 Text("Categories")
-                    .font(.custom("Helvetica Neue", size: 40).weight(.bold))
+                    .font(.custom("Helvetica Neue", size: 400).weight(.bold))
+                    .frame(maxWidth: 0.7 * g.size.width)
                     .foregroundStyle(Color(.white))
                     .padding(.bottom, 20)
                     .padding(.top, 10)
                     .lineLimit(1)
-                    .minimumScaleFactor(0.1)
+                    .minimumScaleFactor(0.01)
+                    
                 
                 Spacer()
             }
@@ -103,7 +106,7 @@ public struct CategoriesView: View {
                                 .shadow(radius: 4.0, y: 5)
                                 .padding(.vertical, 5)
                                 .lineLimit(1)
-                                .minimumScaleFactor(0.1)
+                                .minimumScaleFactor(0.01)
                             
                         })
                         .contentShape(RoundedRectangle(cornerRadius: 15.0))

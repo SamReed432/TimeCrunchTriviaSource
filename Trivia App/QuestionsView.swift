@@ -181,9 +181,6 @@ public struct QuestionsModel {
         }
     }
 
-
-    public init() { }
-
     public var body: some ReducerOf<Self> {
 
         Reduce { state, action in
@@ -342,9 +339,9 @@ public struct QuestionsModel {
                     }
                 case .showResults:
                 if (state.daily) {
-                    state.shareString = "\(state.emojiString) \n I got \(state.cNum) questions correct in today's Trivia Time Daily Challenge! Can you beat it? LINK HERE google.com"
+                    state.shareString = "\(state.emojiString) \n I got \(state.cNum) questions correct in today's Time Crunch Trivia Daily Challenge: \(state.category)! Can you beat it?"
                 } else {
-                    state.shareString = "\(state.emojiString) \n I got \(state.cNum) questions correct in a Trivia Time Challenge! Can you beat it? LINK HERE google.com"
+                    state.shareString = "\(state.emojiString) \n I got \(state.cNum) questions correct in a \(state.totalTime) second Time Crunch Trivia \(state.category + " ")Challenge! Can you beat it?"
                 }
                     state.showResults = true
                     return .none
@@ -645,6 +642,8 @@ public struct QuestionsView: View {
                     Text("3")
                         .font(.custom("Arial Rounded MT Bold", size: 350))
                         .foregroundStyle(Color(.white))
+                        .frame(width: 350, height: 350)
+                        .minimumScaleFactor(0.1)
                         .offset(y: -100)
                         .offset(y: offsetY)
                         .onAppear {
@@ -654,6 +653,8 @@ public struct QuestionsView: View {
                 if (viewStore.state.countDownTime == 1 || viewStore.state.countDownTime == 2){
                     Text("2")
                         .font(.custom("Arial Rounded MT Bold", size: 230))
+                        .frame(width: 230, height: 230)
+                        .minimumScaleFactor(0.1)
                         .foregroundStyle(Color(.white))
                         .offset(y: -100)
                         .offset(y: offsetY2)
@@ -666,6 +667,8 @@ public struct QuestionsView: View {
                 if (viewStore.state.countDownTime == 1){
                     Text("1")
                         .font(.custom("Arial Rounded MT Bold", size: 100))
+                        .frame(width: 150, height: 150)
+                        .minimumScaleFactor(0.1)
                         .foregroundStyle(Color(.white))
                         .offset(y: -100)
                         .offset(y: offsetY3)

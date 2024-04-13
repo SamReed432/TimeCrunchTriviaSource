@@ -14,7 +14,7 @@ public struct ResultsView: View {
     @EnvironmentObject var views: Views
     
     let store: StoreOf<QuestionsModel>
-    private let adUnitID = "ca-app-pub-3940256099942544/4411468910"
+    private let adUnitID = "ca-app-pub-4151998780971734/2286845814"
     
     let shareString: String
     
@@ -207,7 +207,6 @@ public struct ResultsView: View {
                     .padding(.vertical, 5)
                     .font(.title)
                 
-                
                 Spacer()
                 
                 HStack{
@@ -216,12 +215,6 @@ public struct ResultsView: View {
                     
                     VStack {
                         Button("", systemImage: "house") {
-                            self.views.stacked = false
-                            self.views.dailyStacked = false
-                            self.views.categoriesStacked = false
-                            self.views.customStacked = false
-                            self.views.resultsViewShown = false
-
                             if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
                                let window = windowScene.windows.first {
                                 if let rootViewController = window.rootViewController {
@@ -234,6 +227,12 @@ public struct ResultsView: View {
                             } else {
                                 print("No window scene found")
                             }
+                            self.views.stacked = false
+                            self.views.dailyStacked = false
+                            self.views.categoriesStacked = false
+                            self.views.customStacked = false
+                            self.views.resultsViewShown = false
+
                         }
                         .font(.system(size: 40))
                         .minimumScaleFactor(0.01)
