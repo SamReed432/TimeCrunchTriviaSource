@@ -10,7 +10,7 @@ import ComposableArchitecture
 import SwiftData
 
 struct ContentView: View {
-
+    
     var body: some View {
         
         VStack {
@@ -22,6 +22,7 @@ struct ContentView: View {
                 )
             }
         }
+        .background(Image("Background Image").resizable().scaledToFill().frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height).edgesIgnoringSafeArea(.all))
     }
 }
 

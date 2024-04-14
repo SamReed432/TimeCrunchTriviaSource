@@ -18,6 +18,7 @@ class Views: ObservableObject {
     @Published var customStacked = false
     @Published var dailyCategory = ""
     @Published var resultsViewShown = false
+    @Published var isSheetPresented = false
     
 }
 
@@ -49,7 +50,7 @@ public struct HomeView: View {
     public var body: some View {
         
         NavigationView {
-            VStack{
+            ZStack{
     
                 GeometryReader { g in
                     if g.size.width < g.size.height {
@@ -57,6 +58,18 @@ public struct HomeView: View {
                     } else {
                         self.horizontalContent(geometry: g)
                     }
+                    
+                    Image(systemName: "gear")
+                        .position(x: g.size.width * 0.85, y: g.size.height * 0.04)
+                        .font(.largeTitle)
+                        .foregroundColor(Color.gray)
+                        .opacity(0.5)
+                        .onTapGesture {
+                            views.isSheetPresented = true
+                        }
+                        .fullScreenCover(isPresented: $views.isSheetPresented) {
+                            PopUpView(geometry: g)
+                        }
                 }
             }
             .background(Image("Background Image").resizable().scaledToFill().frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height).edgesIgnoringSafeArea(.all))
@@ -84,121 +97,53 @@ public struct HomeView: View {
     func verticalContent(
         geometry g: GeometryProxy
     ) -> some View {
-        return NavigationStack{
+        NavigationStack{
             WithViewStore(store, observe: { $0 }) { viewStore in
-                VStack {
+                    
+            VStack {
+                
+                Spacer()
+                
+                Image("logo")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .scaledToFit()
+                    .padding(.leading, 50)
+                    .padding(.trailing, 50)
+                
+                Spacer()
+                
+                HStack{
                     Spacer()
                     
-                    Image("logo")
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .scaledToFit()
-                        .padding(.leading, 50)
-                        .padding(.trailing, 50)
                     
-                    Spacer()
+                    let calendar = Calendar.current
+                    let currentDate = Date()
                     
-                    HStack{
-                        Spacer()
-                        
-                        
-                        let calendar = Calendar.current
-                        let currentDate = Date()
-                        
-                        let dayNumber = calendar.component(.day, from: currentDate)
-                        let monthNumber = calendar.component(.month, from: currentDate)
-                        let yearNumber = calendar.component(.year, from: currentDate)
-                        
-                        //                  DEBUG TEXT:
-                        //                  Text("\(lastPlayedDailyDay):\(lastPlayedDailyMonth):\(lastPlayedDailyYear)")
-                        
-                        if (
-                            (dayNumber > lastPlayedDailyDay && monthNumber >= lastPlayedDailyMonth && yearNumber >= lastPlayedDailyYear) ||
-                            (monthNumber > lastPlayedDailyMonth && yearNumber >= lastPlayedDailyYear) ||
-                            (yearNumber > lastPlayedDailyYear)
-                        ){
-                            //They can play the daily -- store the current date
-                            Button(action: {
-                                viewStore.send(.stopTimer)
-                                views.dailyStacked = true
-                            }) {
-                                Text("Daily Challenge : \(views.dailyCategory)")
-                                    .font(.custom("Helvetica Neue", size: 300).weight(.bold))
-                                    .fontWeight(.bold)
-                                    .foregroundColor(.white)
-                                    .frame(maxWidth: 0.9 * g.size.width)
-                                    .padding(.vertical, 20)
-                                    .overlay(
-                                        RoundedRectangle(cornerRadius: 15)
-                                            .stroke(Color.white, lineWidth: 4.0)
-                                    )
-                                    .background(Color("accent").opacity(0.52))
-                                    .clipShape(RoundedRectangle(cornerRadius: 15.0))
-                                    .shadow(color: .black, radius: 4, x: 0, y: 4)
-                                    .lineLimit(1)
-                                    .minimumScaleFactor(0.01)
-                            }
-                            .contentShape(RoundedRectangle(cornerRadius: 15.0))
-                            .onAppear {
-                                let _ = Task {
-                                    do {
-                                        let fetchedCatName = try await fetchDailyCat()
-                                        DispatchQueue.main.async {
-                                            views.dailyCategory = formatCategoryName(fetchedCatName.capitalized)
-                                        }
-                                    } catch {
-                                        // Handle the error
-                                    }
-                                }
-                            }
-                        } else {
-                            HStack {
-                                Text("New Daily Challenge: \(String(viewStore.totalTime / 3600)):\(String(format: "%02d", (viewStore.totalTime % 3600) / 60)):\(String(format: "%02d", viewStore.totalTime % 60))")
-                                    .frame(width: 350)
-                                    .onAppear {
-                                        viewStore.send(.startTimer)
-                                    }
-                                    .lineLimit(1)
-                                    .padding(.vertical, 20)
-                            }
-                                .font(.custom("Helvetica Neue", size: 20).weight(.bold))
-                                .fontWeight(.bold)
-                                .foregroundColor(.white)
-                                .frame(maxWidth: 0.9 * g.size.width)
-                                .padding(.vertical, 20)
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 15)
-                                        .stroke(Color.white, lineWidth: 4.0)
-                                )
-                                .background(Color.gray.opacity(0.52))
-                                .clipShape(RoundedRectangle(cornerRadius: 15.0))
-                                //.shadow(color: .black, radius: 4, x: 0, y: 4)
-                            
-                            
-                        }
-                        
-                        Spacer()
-                    }
-                    .navigationDestination(isPresented: $views.dailyStacked) {
-                        QuestionsView(
-                            store: Store(initialState: QuestionsModel.State(totalTime: 60, daily: true, category: views.dailyCategory)) {
-                                QuestionsModel()
-                            }
-                        )
-                    }
+                    let dayNumber = calendar.component(.day, from: currentDate)
+                    let monthNumber = calendar.component(.month, from: currentDate)
+                    let yearNumber = calendar.component(.year, from: currentDate)
                     
-                    HStack{
-                        Spacer()
+                    //                  DEBUG TEXT:
+                    //                  Text("\(lastPlayedDailyDay):\(lastPlayedDailyMonth):\(lastPlayedDailyYear)")
+                    
+                    if (
+                        (dayNumber > lastPlayedDailyDay && monthNumber >= lastPlayedDailyMonth && yearNumber >= lastPlayedDailyYear) ||
+                        (monthNumber > lastPlayedDailyMonth && yearNumber >= lastPlayedDailyYear) ||
+                        (yearNumber > lastPlayedDailyYear)
+                    ){
+                        //They can play the daily -- store the current date
                         Button(action: {
                             viewStore.send(.stopTimer)
-                            views.stacked = true
+                            views.dailyStacked = true
                         }) {
-                            Text("Play 1 Minute Challenge")
+                            Text("Daily Challenge : \(views.dailyCategory)")
                                 .font(.custom("Helvetica Neue", size: 300).weight(.bold))
                                 .fontWeight(.bold)
                                 .foregroundColor(.white)
-                                .frame(maxWidth: 0.9 * g.size.width)
+                                .frame(maxWidth: 0.85 * g.size.width)
                                 .padding(.vertical, 20)
+                                .padding(.horizontal, 10)
                                 .overlay(
                                     RoundedRectangle(cornerRadius: 15)
                                         .stroke(Color.white, lineWidth: 4.0)
@@ -210,33 +155,170 @@ public struct HomeView: View {
                                 .minimumScaleFactor(0.01)
                         }
                         .contentShape(RoundedRectangle(cornerRadius: 15.0))
-                        
-                        Spacer()
-                    }
-                    .navigationDestination(isPresented: $views.stacked) {
-                        QuestionsView(
-                            store: Store(initialState: QuestionsModel.State(totalTime: 60, daily: false, category: "")) {
-                                QuestionsModel()
+                        .onAppear {
+                            let _ = Task {
+                                do {
+                                    let fetchedCatName = try await fetchDailyCat()
+                                    DispatchQueue.main.async {
+                                        views.dailyCategory = formatCategoryName(fetchedCatName.capitalized)
+                                    }
+                                } catch {
+                                    // Handle the error
+                                }
                             }
-                        )
+                        }
+                    } else {
+                        HStack {
+                            Text("New Daily Challenge: \(String(viewStore.totalTime / 3600)):\(String(format: "%02d", (viewStore.totalTime % 3600) / 60)):\(String(format: "%02d", viewStore.totalTime % 60))")
+                                .onAppear {
+                                    viewStore.send(.startTimer)
+                                }
+                                .lineLimit(1)
+                        }
+                            .font(.custom("Helvetica Neue", size: 300).weight(.bold))
+                            .fontWeight(.bold)
+                            .foregroundColor(.white)
+                            .frame(maxWidth: 0.8 * g.size.width)
+                            .padding(.vertical, 20)
+                            .padding(.horizontal, 20)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 15)
+                                    .stroke(Color.white, lineWidth: 4.0)
+                            )
+                            .background(Color("accent").opacity(0.52))
+                            .clipShape(RoundedRectangle(cornerRadius: 15.0))
+                            .shadow(color: .black, radius: 4, x: 0, y: 4)
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.01)
+                        
+                        
                     }
+                    
+                    Spacer()
+                }
+                .navigationDestination(isPresented: $views.dailyStacked) {
+                    QuestionsView(
+                        store: Store(initialState: QuestionsModel.State(totalTime: 60, daily: true, category: views.dailyCategory)) {
+                            QuestionsModel()
+                        }
+                    )
+                }
+                
+                HStack{
+                    Spacer()
+                    Button(action: {
+                        viewStore.send(.stopTimer)
+                        views.stacked = true
+                    }) {
+                        Text("Play 1 Minute Challenge")
+                            .font(.custom("Helvetica Neue", size: 300).weight(.bold))
+                            .fontWeight(.bold)
+                            .foregroundColor(.white)
+                            .frame(maxWidth: 0.8 * g.size.width)
+                            .padding(.vertical, 20)
+                            .padding(.horizontal, 20)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 15)
+                                    .stroke(Color.white, lineWidth: 4.0)
+                            )
+                            .background(Color("accent").opacity(0.52))
+                            .clipShape(RoundedRectangle(cornerRadius: 15.0))
+                            .shadow(color: .black, radius: 4, x: 0, y: 4)
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.01)
+                    }
+                    .contentShape(RoundedRectangle(cornerRadius: 15.0))
+                    
+                    Spacer()
+                }
+                .navigationDestination(isPresented: $views.stacked) {
+                    QuestionsView(
+                        store: Store(initialState: QuestionsModel.State(totalTime: 60, daily: false, category: "")) {
+                            QuestionsModel()
+                        }
+                    )
+                }
+                
+                
+                Spacer()
+                
+                HStack{
+                    Spacer()
+                    
+                    Button(action: {
+                        viewStore.send(.stopTimer)
+                        views.categoriesStacked = true
+                    }) {
+                        Text("Categories")
+                            .font(.custom("Helvetica Neue", size: 30).weight(.bold))
+                            .fontWeight(.bold)
+                            .foregroundColor(.white)
+                            .frame(maxWidth: 0.8 * g.size.width)
+                            .padding(.vertical, 20)
+                            .padding(.horizontal, 20)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 15)
+                                    .stroke(Color.white, lineWidth: 4.0)
+                            )
+                            .background(Color(.white).opacity(0.10))
+                            .clipShape(RoundedRectangle(cornerRadius: 15.0))
+                            .shadow(color: .black, radius: 4, x: 0, y: 4)
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.1)
+                    }
+                    .contentShape(RoundedRectangle(cornerRadius: 15.0))
                     
                     
                     Spacer()
-                    
+                }
+                .navigationDestination(isPresented: $views.categoriesStacked) {
+                    CategoriesView()
+                }
+                
+                Spacer()
+            }
+            .background(Image("Background Image").resizable().scaledToFill().frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height).edgesIgnoringSafeArea(.all))
+                
+            }
+            .scrollContentBackground(.hidden)
+        }
+    }
+    
+    func PopUpView(
+        geometry g: GeometryProxy
+    ) -> some View {
+            return VStack {
+                
+                ZStack {
                     HStack{
-                        Spacer()
-                        
                         Button(action: {
-                            viewStore.send(.stopTimer)
-                            views.categoriesStacked = true
+                            views.isSheetPresented = false
                         }) {
-                            Text("Categories")
-                                .font(.custom("Helvetica Neue", size: 25).weight(.bold))
-                                .fontWeight(.bold)
+                            Image(systemName: "xmark")
+                                .font(.title)
                                 .foregroundColor(.white)
-                                .frame(maxWidth: 0.9 * g.size.width)
-                                .padding(.vertical, 20)
+                                .padding()
+                                .padding(.leading, 15)
+                        }
+                        Spacer()
+                        Spacer()
+                    }
+                    
+                    Text("Menu")
+                        .foregroundColor(.white)
+                        .padding()
+                        .frame(width: g.size.width * 0.9, height: g.size.height * 0.1)
+                        .font(.custom("Helvetica Neue", size: 200).weight(.bold))
+                        .minimumScaleFactor(0.01)
+                }
+                
+                Spacer()
+                
+                Link(destination: URL(string: "https://samreed432.github.io/TimeCrunchTrivia/")!) {
+                            Text("Privacy Policy")
+                                .foregroundColor(.white)
+                                .padding()
+                                .frame(width: g.size.width * 0.8, height: g.size.height * 0.1)
                                 .overlay(
                                     RoundedRectangle(cornerRadius: 15)
                                         .stroke(Color.white, lineWidth: 4.0)
@@ -244,27 +326,34 @@ public struct HomeView: View {
                                 .background(Color(.white).opacity(0.10))
                                 .clipShape(RoundedRectangle(cornerRadius: 15.0))
                                 .shadow(color: .black, radius: 4, x: 0, y: 4)
-                                .lineLimit(1)
-                                .minimumScaleFactor(0.1)
+                                .font(.custom("Helvetica Neue", size: 200).weight(.bold))
+                                .minimumScaleFactor(0.01)
                         }
-                        .contentShape(RoundedRectangle(cornerRadius: 15.0))
-                        
-                        
-                        Spacer()
-                    }
-                    .navigationDestination(isPresented: $views.categoriesStacked) {
-                        CategoriesView()
-                    }
-                    
-                    Spacer()
+                        .padding()
+                Link(destination: URL(string: "https://the-trivia-api.com/")!) {
+                            Text("Trivia API")
+                                .foregroundColor(.white)
+                                .padding()
+                                .frame(width: g.size.width * 0.8, height: g.size.height * 0.1)
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 15)
+                                        .stroke(Color.white, lineWidth: 4.0)
+                                )
+                                .background(Color(.white).opacity(0.10))
+                                .clipShape(RoundedRectangle(cornerRadius: 15.0))
+                                .shadow(color: .black, radius: 4, x: 0, y: 4)
+                                .font(.custom("Helvetica Neue", size: 200).weight(.bold))
+                                .minimumScaleFactor(0.01)
                 }
-                .background(Image("Background Image").resizable().scaledToFill().frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height).edgesIgnoringSafeArea(.all))
+                
+                Spacer()
+                Spacer()
+                
             }
-            .scrollContentBackground(.hidden)
-            
-            
+            .padding()
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(Image("Background Image").resizable().scaledToFill().frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height).edgesIgnoringSafeArea(.all))
         }
-    }
 
     func horizontalContent(
         geometry g: GeometryProxy
