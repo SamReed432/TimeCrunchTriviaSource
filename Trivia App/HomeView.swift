@@ -10,6 +10,8 @@ import SwiftUI
 import ComposableArchitecture
 import SwiftData
 import Combine
+import AVFoundation
+
 
 class Views: ObservableObject {
     @Published var stacked = false
@@ -19,12 +21,51 @@ class Views: ObservableObject {
     @Published var dailyCategory = ""
     @Published var resultsViewShown = false
     @Published var isSheetPresented = false
-    
+    @Published var isGearPresented = true
 }
 
-public struct HomeView: View {
+class SoundManager: ObservableObject {
     
+    static let shared = SoundManager()
+    
+    @Published var select = AVAudioPlayer()
+    @Published var correct = AVAudioPlayer()
+    @Published var wrong = AVAudioPlayer()
+    @Published var game_over = AVAudioPlayer()
+    
+    let select_url = URL(fileURLWithPath: Bundle.main.path(forResource: "select", ofType: ".mp3")!)
+    let correct_url = URL(fileURLWithPath: Bundle.main.path(forResource: "correct1", ofType: ".mp3")!)
+    let wrong_url = URL(fileURLWithPath: Bundle.main.path(forResource: "wrong", ofType: ".mp3")!)
+    let game_over_url = URL(fileURLWithPath: Bundle.main.path(forResource: "game_over", ofType: ".mp3")!)
+    
+    public init () {
+        do {
+            select = AVAudioPlayer()
+            select = try AVAudioPlayer(contentsOf: select_url)
+            select.prepareToPlay()
+            
+            correct = AVAudioPlayer()
+            correct = try AVAudioPlayer(contentsOf: correct_url)
+            correct.prepareToPlay()
+            
+            wrong = AVAudioPlayer()
+            wrong = try AVAudioPlayer(contentsOf: wrong_url)
+            wrong.prepareToPlay()
+            
+            wrong = AVAudioPlayer()
+            wrong = try AVAudioPlayer(contentsOf: wrong_url)
+            wrong.prepareToPlay()
+            print("inited")
+        } catch {
+            print(error)
+        }
+    }
+}
+
+
+public struct HomeView: View {
     @ObservedObject var views = Views()
+    @ObservedObject var sounds = SoundManager.shared
     
     let store: StoreOf<HomeViewModel>
     
@@ -35,6 +76,7 @@ public struct HomeView: View {
     
     public init(store: StoreOf<HomeViewModel>) {
         self.store = store
+        
         Task { [self] in
             do {
                 let fetchedCatName = try await fetchDailyCat()
@@ -59,17 +101,21 @@ public struct HomeView: View {
                         self.horizontalContent(geometry: g)
                     }
                     
-                    Image(systemName: "gear")
-                        .position(x: g.size.width * 0.85, y: g.size.height * 0.04)
-                        .font(.largeTitle)
-                        .foregroundColor(Color.gray)
-                        .opacity(0.5)
-                        .onTapGesture {
-                            views.isSheetPresented = true
-                        }
-                        .fullScreenCover(isPresented: $views.isSheetPresented) {
-                            PopUpView(geometry: g)
-                        }
+                    
+                    if (views.isGearPresented){
+                        Image(systemName: "gear")
+                            .position(x: g.size.width * 0.85, y: g.size.height * 0.04)
+                            .font(.largeTitle)
+                            .foregroundColor(Color.gray)
+                            .opacity(0.5)
+                            .onTapGesture {
+                                sounds.select.play()
+                                views.isSheetPresented = true
+                            }
+                            .fullScreenCover(isPresented: $views.isSheetPresented) {
+                                PopUpView(geometry: g)
+                            }
+                    }
                 }
             }
             .background(Image("Background Image").resizable().scaledToFill().frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height).edgesIgnoringSafeArea(.all))
@@ -134,8 +180,10 @@ public struct HomeView: View {
                     ){
                         //They can play the daily -- store the current date
                         Button(action: {
+                            sounds.select.play()
                             viewStore.send(.stopTimer)
                             views.dailyStacked = true
+                            views.isGearPresented = false
                         }) {
                             Text("Daily Challenge : \(views.dailyCategory)")
                                 .font(.custom("Helvetica Neue", size: 300).weight(.bold))
@@ -207,8 +255,10 @@ public struct HomeView: View {
                 HStack{
                     Spacer()
                     Button(action: {
+                        sounds.select.play()
                         viewStore.send(.stopTimer)
                         views.stacked = true
+                        views.isGearPresented = false
                     }) {
                         Text("Play 1 Minute Challenge")
                             .font(.custom("Helvetica Neue", size: 300).weight(.bold))
@@ -246,8 +296,10 @@ public struct HomeView: View {
                     Spacer()
                     
                     Button(action: {
+                        sounds.select.play()
                         viewStore.send(.stopTimer)
                         views.categoriesStacked = true
+                        views.isGearPresented = false
                     }) {
                         Text("Categories")
                             .font(.custom("Helvetica Neue", size: 30).weight(.bold))

@@ -232,7 +232,7 @@ public struct ResultsView: View {
                             self.views.categoriesStacked = false
                             self.views.customStacked = false
                             self.views.resultsViewShown = false
-
+                            self.views.isGearPresented = true
                         }
                         .font(.system(size: 40))
                         .minimumScaleFactor(0.01)

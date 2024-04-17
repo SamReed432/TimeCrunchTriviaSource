@@ -9,6 +9,7 @@ import Foundation
 import SwiftUI
 import ComposableArchitecture
 import Combine
+import AVFoundation
 
 private var configURL = URL(string: "https://the-trivia-api.com/v2/questions")!
 
@@ -49,8 +50,29 @@ class DefaultHandlingSessionDelegate: NSObject, URLSessionDelegate {
     }
 }
 
+class GameSounds: ObservableObject {
+    @Published var audioPlayer = AVAudioPlayer()
+    
+    let url = URL(fileURLWithPath: Bundle.main.path(forResource: "select", ofType: ".mp3")!)
+    
+    public init () {
+        do {
+            audioPlayer = AVAudioPlayer()
+            audioPlayer = try AVAudioPlayer(contentsOf: url)
+            audioPlayer.prepareToPlay()
+            print("inited")
+        } catch {
+            print(error)
+        }
+    }
+}
+
+
 @Reducer
 public struct QuestionsModel {
+    
+    @ObservedObject var sounds = SoundManager.shared
+    
     public struct State: Equatable, Codable {
         public var qNum: Int
         public var cNum: Int
@@ -196,9 +218,11 @@ public struct QuestionsModel {
                     state.qNum += 1
                     state.isAnimationInProgress = true
                     if (answer == state.correctAnswerIndex) {
+                        sounds.correct.play()
                         state.cNum += 1
                         state.emojiString += "✅"
                     } else {
+                        sounds.wrong.play()
                         state.emojiString += "🟥"
                     }
                     return Effect.run { send in
@@ -312,6 +336,7 @@ public struct QuestionsModel {
                         .cancellable(id: QuestionsModel.Identifiers.simulationCancellable)
 
                 case .stopTimer:
+                sounds.game_over.play()
                     state.isRunningTimer = false
                 return Effect.run { send in
                     await send(.cancelTimer)
@@ -357,7 +382,7 @@ public struct QuestionsView: View {
     @State private var offsetY: CGFloat = 0
     @State private var offsetY2: CGFloat = 0
     @State private var offsetY3: CGFloat = 0
-
+    
     public init(store: StoreOf<QuestionsModel>) {
         self.store = store
     }
