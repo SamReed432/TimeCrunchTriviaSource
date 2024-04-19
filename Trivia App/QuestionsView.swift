@@ -202,6 +202,12 @@ public struct QuestionsModel {
                 .eraseToAnyPublisher()
         }
     }
+    
+    public func triggerHapticFeedback() {
+        let generator = UINotificationFeedbackGenerator()
+        generator.notificationOccurred(.error)  // This triggers a success haptic feedback
+    }
+
 
     public var body: some ReducerOf<Self> {
 
@@ -209,6 +215,23 @@ public struct QuestionsModel {
             switch action {
                 // Your Problem 6B code modifies the two cases below
                 case .appear:
+                    if (state.daily){
+                        let calendar = Calendar.current
+                        let currentDate = Date()
+                        
+                        let dayNumber = calendar.component(.day, from: currentDate)
+                        let monthNumber = calendar.component(.month, from: currentDate)
+                        let yearNumber = calendar.component(.year, from: currentDate)
+                        
+                        @AppStorage("lastPlayedDailyDay") var lastPlayedDailyDay: Int = 0
+                        @AppStorage("lastPlayedDailyMonth") var lastPlayedDailyMonth: Int = 0
+                        @AppStorage("lastPlayedDailyYear") var lastPlayedDailyYear: Int = 0
+                        
+                        lastPlayedDailyDay = dayNumber
+                        lastPlayedDailyMonth = monthNumber
+                        lastPlayedDailyYear = yearNumber
+                    }
+                    
                     return Effect.run { send in
                         await send(.startCountDown)
                         await send(.getQuestion, animation: .easeInOut(duration: 0.5))
@@ -363,11 +386,12 @@ public struct QuestionsModel {
                         await send(.startTimer, animation: .easeInOut(duration: 0.5))
                     }
                 case .showResults:
-                if (state.daily) {
-                    state.shareString = "\(state.emojiString) \n I got \(state.cNum) questions correct in today's Time Crunch Trivia Daily Challenge: \(state.category)! Can you beat it?"
-                } else {
-                    state.shareString = "\(state.emojiString) \n I got \(state.cNum) questions correct in a \(state.totalTime) second Time Crunch Trivia \(state.category + " ")Challenge! Can you beat it?"
-                }
+                    triggerHapticFeedback()
+                    if (state.daily) {
+                        state.shareString = "\(state.emojiString) \n I got \(state.cNum) questions correct in today's Time Crunch Trivia Daily Challenge: \(state.category)! Can you beat it?"
+                    } else {
+                        state.shareString = "\(state.emojiString) \n I got \(state.cNum) questions correct in a \(state.totalTime) second Time Crunch Trivia \(state.category + " ")Challenge! Can you beat it?"
+                    }
                     state.showResults = true
                     return .none
             }
@@ -418,17 +442,6 @@ public struct QuestionsView: View {
                 }
                 .onAppear{
                     viewStore.send(.appear)
-                    
-                    let calendar = Calendar.current
-                    let currentDate = Date()
-                    
-                    let dayNumber = calendar.component(.day, from: currentDate)
-                    let monthNumber = calendar.component(.month, from: currentDate)
-                    let yearNumber = calendar.component(.year, from: currentDate)
-                    
-                    lastPlayedDailyDay = dayNumber
-                    lastPlayedDailyMonth = monthNumber
-                    lastPlayedDailyYear = yearNumber
                 }
                 .onDisappear{
                     viewStore.send(.stopTimer)
@@ -607,6 +620,11 @@ public struct QuestionsView: View {
         .background(Color.black.opacity(0.15))
     }
 
+    public func triggerHapticFeedback2() {
+        let generator = UINotificationFeedbackGenerator()
+        generator.notificationOccurred(.success)  // This triggers a success haptic feedback 
+    }
+    
     func horizontalContent(
         for viewStore: ViewStoreOf<QuestionsModel>,
         geometry g: GeometryProxy
@@ -616,18 +634,21 @@ public struct QuestionsView: View {
     }
     
     func startDropAnimation() {
+        triggerHapticFeedback2()
         withAnimation(.interactiveSpring(response: 0.5, dampingFraction: 0.6, blendDuration: 1.8)) {
             offsetY = UIScreen.main.bounds.height / 3
         }
     }
     
     func startDropAnimation2() {
+        triggerHapticFeedback2()
         withAnimation(.interactiveSpring(response: 0.5, dampingFraction: 0.6, blendDuration: 1.8)) {
             offsetY2 = UIScreen.main.bounds.height / 3
         }
     }
     
     func startDropAnimation3() {
+        triggerHapticFeedback2()
         withAnimation(.interactiveSpring(response: 0.5, dampingFraction: 0.6, blendDuration: 1.8)) {
             offsetY3 = UIScreen.main.bounds.height / 3
         }

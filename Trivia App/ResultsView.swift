@@ -8,6 +8,7 @@ import Foundation
 import SwiftUI
 import ComposableArchitecture
 import GoogleMobileAds
+import SwiftData
 
 public struct ResultsView: View {
     
@@ -233,6 +234,16 @@ public struct ResultsView: View {
                             self.views.customStacked = false
                             self.views.resultsViewShown = false
                             self.views.isGearPresented = true
+                            
+                            @AppStorage("score_saved") var scoreSaved: Bool = false
+                            @AppStorage("saved_cNum") var savedcNum: Int = 0
+                            @AppStorage("saved_qNum") var savedqNum: Int = 0
+                            @AppStorage("saved_shareString") var savedShareString: String = ""
+                            
+                            savedcNum = viewStore.state.cNum
+                            savedqNum = viewStore.state.qNum
+                            scoreSaved = true
+                            savedShareString = self.shareString
                         }
                         .font(.system(size: 40))
                         .minimumScaleFactor(0.01)

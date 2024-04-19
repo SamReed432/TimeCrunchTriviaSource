@@ -22,6 +22,7 @@ class Views: ObservableObject {
     @Published var resultsViewShown = false
     @Published var isSheetPresented = false
     @Published var isGearPresented = true
+    @Published var prevResults = false
 }
 
 class SoundManager: ObservableObject {
@@ -52,10 +53,9 @@ class SoundManager: ObservableObject {
             wrong = try AVAudioPlayer(contentsOf: wrong_url)
             wrong.prepareToPlay()
             
-            wrong = AVAudioPlayer()
-            wrong = try AVAudioPlayer(contentsOf: wrong_url)
-            wrong.prepareToPlay()
-            print("inited")
+            game_over = AVAudioPlayer()
+            game_over = try AVAudioPlayer(contentsOf: game_over_url)
+            game_over.prepareToPlay()
         } catch {
             print(error)
         }
@@ -170,8 +170,8 @@ public struct HomeView: View {
                     let monthNumber = calendar.component(.month, from: currentDate)
                     let yearNumber = calendar.component(.year, from: currentDate)
                     
-                    //                  DEBUG TEXT:
-                    //                  Text("\(lastPlayedDailyDay):\(lastPlayedDailyMonth):\(lastPlayedDailyYear)")
+//                                      DEBUG TEXT:
+//                                      Text("\(lastPlayedDailyDay):\(lastPlayedDailyMonth):\(lastPlayedDailyYear)")
                     
                     if (
                         (dayNumber > lastPlayedDailyDay && monthNumber >= lastPlayedDailyMonth && yearNumber >= lastPlayedDailyYear) ||
@@ -217,11 +217,29 @@ public struct HomeView: View {
                         }
                     } else {
                         HStack {
-                            Text("New Daily Challenge: \(String(viewStore.totalTime / 3600)):\(String(format: "%02d", (viewStore.totalTime % 3600) / 60)):\(String(format: "%02d", viewStore.totalTime % 60))")
-                                .onAppear {
-                                    viewStore.send(.startTimer)
+                            Button (action: {
+                                views.prevResults = true
+                            }){
+                                VStack {
+                                    Text("New Daily Challenge: \(String(viewStore.totalTime / 3600)):\(String(format: "%02d", (viewStore.totalTime % 3600) / 60)):\(String(format: "%02d", viewStore.totalTime % 60))")
+                                        .onAppear {
+                                            viewStore.send(.startTimer)
+                                        }
+                                    .lineLimit(1)
+                                    
+                                    HStack {
+                                        Spacer()
+                                        Text("See My Score ")
+                                            .lineLimit(1)
+                                        Image(systemName: "chevron.forward")
+                                            .font(.custom("Helvetica Neue", size: 25).weight(.bold))
+                                            .frame(maxWidth: 0.1 * g.size.width)
+                                            .foregroundStyle(Color(.white))
+                                            .lineLimit(1)
+                                        Spacer()
+                                    }
                                 }
-                                .lineLimit(1)
+                            }
                         }
                             .font(.custom("Helvetica Neue", size: 300).weight(.bold))
                             .fontWeight(.bold)
@@ -250,6 +268,9 @@ public struct HomeView: View {
                             QuestionsModel()
                         }
                     )
+                }
+                .navigationDestination(isPresented: $views.prevResults) {
+                    PrevResultsView()
                 }
                 
                 HStack{
