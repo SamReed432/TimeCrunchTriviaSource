@@ -622,7 +622,7 @@ public struct QuestionsView: View {
 
     public func triggerHapticFeedback2() {
         let generator = UINotificationFeedbackGenerator()
-        generator.notificationOccurred(.success)  // This triggers a success haptic feedback 
+        generator.notificationOccurred(.success)  // This triggers a success haptic feedback
     }
     
     func horizontalContent(
