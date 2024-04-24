@@ -11,8 +11,8 @@
 			<array>
 				<string></string>
 			</array>
-			<key>Item 0</key>
-			<string>CA92.1: Acess information from same app, per documentation</string>
+			<key></key>
+			<string>CA92.1</string>
 		</dict>
 		<dict>
 			<key>NSPrivacyAccessedAPIType</key>
@@ -22,8 +22,7 @@
 				<string></string>
 			</array>
 			<key>Item 0</key>
-			<string>E174.1: Check whether there is sufficient disk space to store data, per documentation
-E174.1: Check whether there is sufficient disk space to store data, per documentation</string>
+			<string>E174.1</string>
 		</dict>
 	</array>
 </dict>

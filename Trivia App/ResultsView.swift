@@ -138,7 +138,7 @@ public struct ResultsView: View {
         // Create the notification content
         let content = UNMutableNotificationContent()
         content.title = "A New Daily Challenge Is Waiting!"
-        content.body = "Today's category: \(category)"
+        content.body = "Today's category: \(formatCategoryName(category))"
         content.sound = .default
         
         // Create the notification request
@@ -151,7 +151,6 @@ public struct ResultsView: View {
             }
         }
     }
-
     
     private func cancelNotificationIfNeeded() {
             let currentDate = Date()
@@ -234,7 +233,11 @@ public struct ResultsView: View {
                             self.views.customStacked = false
                             self.views.resultsViewShown = false
                             self.views.isGearPresented = true
-                            
+                        }
+                        .font(.system(size: 40))
+                        .minimumScaleFactor(0.01)
+                        .frame(height: 50, alignment:.bottom)
+                        .onAppear{
                             @AppStorage("score_saved") var scoreSaved: Bool = false
                             @AppStorage("saved_cNum") var savedcNum: Int = 0
                             @AppStorage("saved_qNum") var savedqNum: Int = 0
@@ -245,9 +248,6 @@ public struct ResultsView: View {
                             scoreSaved = true
                             savedShareString = self.shareString
                         }
-                        .font(.system(size: 40))
-                        .minimumScaleFactor(0.01)
-                        .frame(height: 50, alignment:.bottom)
                         
                         Text("Home")
                             .font(.system(size: 25))
