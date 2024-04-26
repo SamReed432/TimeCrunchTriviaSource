@@ -42,9 +42,6 @@ public struct ResultsView: View {
                     }
                 }
                 
-                
-                
-                
                 Spacer()
             }
             .background(Image("Background Image").resizable().scaledToFill().frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height).edgesIgnoringSafeArea(.all))
@@ -238,6 +235,8 @@ public struct ResultsView: View {
                         .minimumScaleFactor(0.01)
                         .frame(height: 50, alignment:.bottom)
                         .onAppear{
+                            
+                            if (viewStore.state.daily) {
                             @AppStorage("score_saved") var scoreSaved: Bool = false
                             @AppStorage("saved_cNum") var savedcNum: Int = 0
                             @AppStorage("saved_qNum") var savedqNum: Int = 0
@@ -246,7 +245,7 @@ public struct ResultsView: View {
                             savedcNum = viewStore.state.cNum
                             savedqNum = viewStore.state.qNum
                             scoreSaved = true
-                            savedShareString = self.shareString
+                            savedShareString = self.shareString}
                         }
                         
                         Text("Home")
