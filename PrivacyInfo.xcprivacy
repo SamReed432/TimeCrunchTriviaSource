@@ -9,20 +9,16 @@
 			<string>NSPrivacyAccessedAPICategoryUserDefaults</string>
 			<key>NSPrivacyAccessedAPITypeReasons</key>
 			<array>
-				<string></string>
+				<string>CA92.1: Access info from same app, per documentation</string>
 			</array>
-			<key></key>
-			<string>CA92.1</string>
 		</dict>
 		<dict>
 			<key>NSPrivacyAccessedAPIType</key>
 			<string>NSPrivacyAccessedAPICategoryDiskSpace</string>
 			<key>NSPrivacyAccessedAPITypeReasons</key>
 			<array>
-				<string></string>
+				<string>E174.1: Write or delete file on-device, per documentation</string>
 			</array>
-			<key>Item 0</key>
-			<string>E174.1</string>
 		</dict>
 	</array>
 </dict>
