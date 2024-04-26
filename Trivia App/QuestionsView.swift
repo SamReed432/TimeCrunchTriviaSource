@@ -286,10 +286,15 @@ public struct QuestionsModel {
                         return .none
                     }
 
+                    var urlRequest = URLRequest(url: apiUrl)
+                    
+                    // Set the API key in the HTTP header
+                    urlRequest.setValue("786Vn8DAfZjyiCwyFPntykRDp", forHTTPHeaderField: "x-api-key")
+                    
                     return Effect
                         .publisher {
                             URLSession
-                                .DataTaskPublisher(request: URLRequest(url: apiUrl), session: Self.session)
+                                .DataTaskPublisher(request: urlRequest, session: Self.session)
                                 .mapError { APIError.urlError(apiUrl, $0) }
                                 .tryMap (Self.validateHttpResponse)
                                 .mapError { $0 as! APIError }
