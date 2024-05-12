@@ -22,7 +22,10 @@ class Views: ObservableObject {
     @Published var resultsViewShown = false
     @Published var isSheetPresented = false
     @Published var isGearPresented = true
+    @Published var isQuestionPresented = true
     @Published var prevResults = false
+    @Published var instructionsShown = false
+    @Published var firstDailyInstr = false
 }
 
 class SoundManager: ObservableObject {
@@ -72,6 +75,7 @@ public struct HomeView: View {
     @AppStorage("lastPlayedDailyDay") var lastPlayedDailyDay: Int = 0
     @AppStorage("lastPlayedDailyMonth") var lastPlayedDailyMonth: Int = 0
     @AppStorage("lastPlayedDailyYear") var lastPlayedDailyYear: Int = 0
+    @AppStorage("seenDailyInstrs") var seenDailyInstrs: Bool = false
     
     
     public init(store: StoreOf<HomeViewModel>) {
@@ -101,21 +105,58 @@ public struct HomeView: View {
                         self.horizontalContent(geometry: g)
                     }
                     
-                    
-                    if (views.isGearPresented){
-                        Image(systemName: "gear")
-                            .position(x: g.size.width * 0.85, y: g.size.height * 0.04)
-                            .font(.largeTitle)
-                            .foregroundColor(Color.gray)
-                            .opacity(0.5)
-                            .onTapGesture {
-                                sounds.select.play()
-                                views.isSheetPresented = true
-                            }
-                            .fullScreenCover(isPresented: $views.isSheetPresented) {
-                                PopUpView(geometry: g)
-                            }
+                    if views.isQuestionPresented {
+                        ZStack {
+                            Rectangle()
+                                .foregroundColor(Color.clear)
+                                .frame(width: 50, height: 50)
+                                .position(x: g.size.width * 0.15, y: g.size.height * 0.04)
+                                .onTapGesture {
+                                    sounds.select.play()
+                                    views.instructionsShown = true
+                                }
+                            
+                            Image(systemName: "questionmark.circle")
+                                .position(x: g.size.width * 0.15, y: g.size.height * 0.04)
+                                .font(.largeTitle)
+                                .foregroundColor(Color.gray)
+                                .opacity(0.5)
+                                .onTapGesture {
+                                    sounds.select.play()
+                                    views.instructionsShown = true
+                                }
+                                .fullScreenCover(isPresented: $views.instructionsShown) {
+                                    PopUpInstrs(geometry: g)
+                                }
+                        }
                     }
+
+                    if views.isGearPresented {
+                        ZStack {
+                            Rectangle()
+                                .foregroundColor(Color.clear)
+                                .frame(width: 50, height: 50)
+                                .position(x: g.size.width * 0.85, y: g.size.height * 0.04)
+                                .onTapGesture {
+                                    sounds.select.play()
+                                    views.isSheetPresented = true
+                                }
+                            
+                            Image(systemName: "gear")
+                                .position(x: g.size.width * 0.85, y: g.size.height * 0.04)
+                                .font(.largeTitle)
+                                .foregroundColor(Color.gray)
+                                .opacity(0.5)
+                                .onTapGesture {
+                                    sounds.select.play()
+                                    views.isSheetPresented = true
+                                }
+                                .fullScreenCover(isPresented: $views.isSheetPresented) {
+                                    PopUpView(geometry: g)
+                                }
+                        }
+                    }
+
                 }
             }
             .background(Image("Background Image").resizable().scaledToFill().frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height).edgesIgnoringSafeArea(.all))
@@ -182,8 +223,15 @@ public struct HomeView: View {
                         Button(action: {
                             sounds.select.play()
                             viewStore.send(.stopTimer)
-                            views.dailyStacked = true
-                            views.isGearPresented = false
+                            
+                            if (seenDailyInstrs){
+                                views.dailyStacked = true
+                                views.isGearPresented = false
+                                views.isQuestionPresented = false
+                            } else {
+                                views.firstDailyInstr = true
+                                seenDailyInstrs = true
+                            }
                         }) {
                             Text("Daily Challenge : \(views.dailyCategory)")
                                 .font(.custom("Helvetica Neue", size: 300).weight(.bold))
@@ -256,8 +304,6 @@ public struct HomeView: View {
                             .shadow(color: .black, radius: 4, x: 0, y: 4)
                             .lineLimit(1)
                             .minimumScaleFactor(0.01)
-                        
-                        
                     }
                     
                     Spacer()
@@ -268,6 +314,9 @@ public struct HomeView: View {
                             QuestionsModel()
                         }
                     )
+                }
+                .navigationDestination(isPresented: $views.firstDailyInstr) {
+                    InstructionView()
                 }
                 .navigationDestination(isPresented: $views.prevResults) {
                     PrevResultsView()
@@ -280,6 +329,7 @@ public struct HomeView: View {
                         viewStore.send(.stopTimer)
                         views.stacked = true
                         views.isGearPresented = false
+                        views.isQuestionPresented = false
                     }) {
                         Text("Play 1 Minute Challenge")
                             .font(.custom("Helvetica Neue", size: 300).weight(.bold))
@@ -321,6 +371,7 @@ public struct HomeView: View {
                         viewStore.send(.stopTimer)
                         views.categoriesStacked = true
                         views.isGearPresented = false
+                        views.isQuestionPresented = false
                     }) {
                         Text("Categories")
                             .font(.custom("Helvetica Neue", size: 30).weight(.bold))
@@ -423,6 +474,110 @@ public struct HomeView: View {
                 Spacer()
                 
             }
+            .padding()
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(Image("Background Image").resizable().scaledToFill().frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height).edgesIgnoringSafeArea(.all))
+        }
+    
+    func PopUpInstrs(
+        geometry g: GeometryProxy
+    ) -> some View {
+        return VStack {
+            ZStack {
+                BackgroundImageView()
+                    .edgesIgnoringSafeArea(.all)
+                
+                VStack {
+                    
+                    
+                    ZStack {
+                        HStack{
+                            Button(action: {
+                                views.instructionsShown = false
+                            }) {
+                                Image(systemName: "xmark")
+                                    .font(.title)
+                                    .foregroundColor(.white)
+                                    .padding()
+                                    .padding(.leading, 0)
+                            }
+                            Spacer()
+                            Spacer()
+                        }
+                        
+                        Text("How To Play")
+                            .foregroundColor(.white)
+                            .padding(.leading, 40)
+                            .frame(width: g.size.width * 0.8, height: g.size.height * 0.12)
+                            .font(.custom("Helvetica Neue", size: 150).weight(.bold))
+                            .minimumScaleFactor(0.01)
+                    }
+                    
+                    
+                    VStack(spacing: 20) {
+                        // Daily Challenge
+                        VStack(alignment: .leading, spacing: 10) {
+                            Text("Daily Challenge:")
+                                .font(.custom("Helvetica Neue", size: 300).weight(.bold))
+                                .fontWeight(.bold)
+                                .foregroundColor(.white)
+                                .frame(maxWidth: 0.65 * g.size.width)
+                                .lineLimit(1)
+                                .minimumScaleFactor(0.01)
+                            
+                            
+                            Text("✅ Everyone receives the same 10 questions based on a new category each day.")
+                                .font(.system(size: 20, weight: .bold))
+                                .foregroundColor(.white)
+                                .padding(.horizontal, 10)
+                            
+                            Text("✅ You have just 1 minute to answer as many as you can.")
+                                .font(.system(size: 20, weight: .bold))
+                                .foregroundColor(.white)
+                                .padding(.horizontal, 10)
+                            
+                            Text("✅ Ready to test your knowledge? Share your score to compete with other players!")
+                                .font(.system(size:20, weight: .bold))
+                                .foregroundColor(.white)
+                                .padding(.horizontal, 10)
+                        }
+                        .padding(.vertical, 10)
+                        
+                        // One Minute and Custom Challenges
+                        VStack(alignment: .leading, spacing: 10) {
+                            Text("One Minute and Custom Challenges:")
+                                .font(.custom("Helvetica Neue", size: 25).weight(.bold))
+                                .fontWeight(.bold)
+                                .foregroundColor(.white)
+                                .frame(maxWidth: 0.65 * g.size.width)
+                            //                                    .lineLimit(1)
+                                .minimumScaleFactor(0.01)
+                            
+                            Text("⊙ Custom challenges let you tailor the trivia experience.")
+                                .font(.system(size: 20, weight: .bold))
+                                .foregroundColor(.white)
+                                .padding(.horizontal, 10)
+                            
+                            Text("⊙ Choose your category and set your own time limit.")
+                                .font(.system(size: 20, weight: .bold))
+                                .foregroundColor(.white)
+                                .padding(.horizontal, 10)
+                            
+                            Text("⊙ Ready to challenge yourself or your friends? Let the trivia fun begin!")
+                                .font(.system(size: 20, weight: .bold))
+                                .foregroundColor(.white)
+                                .padding(.horizontal, 10)
+                        }
+                        .padding(.vertical, 10)
+                    }
+                    .padding(.horizontal, 20)
+                    
+                    Spacer()
+                }
+            }
+            
+            Spacer()
+        }
             .padding()
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(Image("Background Image").resizable().scaledToFill().frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height).edgesIgnoringSafeArea(.all))

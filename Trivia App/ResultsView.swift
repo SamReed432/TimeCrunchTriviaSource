@@ -230,6 +230,9 @@ public struct ResultsView: View {
                             self.views.customStacked = false
                             self.views.resultsViewShown = false
                             self.views.isGearPresented = true
+                            views.isQuestionPresented = true
+                            self.views.instructionsShown = false
+                            self.views.firstDailyInstr = false
                         }
                         .font(.system(size: 40))
                         .minimumScaleFactor(0.01)
