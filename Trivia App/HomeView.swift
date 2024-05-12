@@ -115,7 +115,7 @@ public struct HomeView: View {
                                     sounds.select.play()
                                     views.instructionsShown = true
                                 }
-                            
+                            
                             Image(systemName: "questionmark.circle")
                                 .position(x: g.size.width * 0.15, y: g.size.height * 0.04)
                                 .font(.largeTitle)
