@@ -101,7 +101,7 @@ public struct CategoriesView: View {
                                     RoundedRectangle(cornerRadius: 15)
                                         .stroke(Color.white, lineWidth: 4.0)
                                 )
-                                .background(Color("accent").opacity(0.60))
+                                .background(Color("AccentColor").opacity(0.60))
                                 .clipShape(RoundedRectangle(cornerRadius: 15))
                                 .shadow(radius: 4.0, y: 5)
                                 .padding(.vertical, 5)

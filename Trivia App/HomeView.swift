@@ -232,7 +232,7 @@ public struct HomeView: View {
                                 seenDailyInstrs = true
                             }
                         }) {
-                            Text("Daily Challenge : \(views.dailyCategory)")
+                            Text("Daily Challenge: \(views.dailyCategory)")
                                 .font(.custom("Helvetica Neue", size: 300).weight(.bold))
                                 .fontWeight(.bold)
                                 .foregroundColor(.white)
@@ -243,10 +243,10 @@ public struct HomeView: View {
                                     RoundedRectangle(cornerRadius: 15)
                                         .stroke(Color.white, lineWidth: 4.0)
                                 )
-                                .background(Color("accent").opacity(0.52))
+                                .background(Color("AccentColor").opacity(0.52))
                                 .clipShape(RoundedRectangle(cornerRadius: 15.0))
                                 .shadow(color: .black, radius: 4, x: 0, y: 4)
-                                .lineLimit(1)
+                                .lineLimit(2)
                                 .minimumScaleFactor(0.01)
                         }
                         .contentShape(RoundedRectangle(cornerRadius: 15.0))
@@ -298,7 +298,7 @@ public struct HomeView: View {
                                 RoundedRectangle(cornerRadius: 15)
                                     .stroke(Color.white, lineWidth: 4.0)
                             )
-                            .background(Color("accent").opacity(0.52))
+                            .background(Color("AccentColor").opacity(0.52))
                             .clipShape(RoundedRectangle(cornerRadius: 15.0))
                             .shadow(color: .black, radius: 4, x: 0, y: 4)
                             .lineLimit(1)
@@ -321,6 +321,8 @@ public struct HomeView: View {
                     PrevResultsView()
                 }
                 
+                Spacer()
+                
                 HStack{
                     Spacer()
                     Button(action: {
@@ -330,8 +332,8 @@ public struct HomeView: View {
                         views.isGearPresented = false
                         views.isQuestionPresented = false
                     }) {
-                        Text("Play 1 Minute Challenge")
-                            .font(.custom("Helvetica Neue", size: 300).weight(.bold))
+                        Text("1 Minute Challenge")
+                            .font(.custom("Helvetica Neue", size: 30).weight(.bold))
                             .fontWeight(.bold)
                             .foregroundColor(.white)
                             .frame(maxWidth: 0.8 * g.size.width)
@@ -341,7 +343,8 @@ public struct HomeView: View {
                                 RoundedRectangle(cornerRadius: 15)
                                     .stroke(Color.white, lineWidth: 4.0)
                             )
-                            .background(Color("accent").opacity(0.52))
+                            //.background(Color("AccentColor").opacity(0.52))
+                            .background(Color(.white).opacity(0.20))
                             .clipShape(RoundedRectangle(cornerRadius: 15.0))
                             .shadow(color: .black, radius: 4, x: 0, y: 4)
                             .lineLimit(1)
@@ -360,7 +363,6 @@ public struct HomeView: View {
                 }
                 
                 
-                Spacer()
                 
                 HStack{
                     Spacer()

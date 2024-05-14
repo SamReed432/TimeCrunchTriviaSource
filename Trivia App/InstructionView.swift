@@ -70,7 +70,7 @@ public struct InstructionView: View {
                                                 RoundedRectangle(cornerRadius: 15)
                                                     .stroke(Color.white, lineWidth: 4.0)
                                             )
-                                            .background(Color("accent").opacity(0.52))
+                                            .background(Color("AccentColor").opacity(0.52))
                                             .clipShape(RoundedRectangle(cornerRadius: 15.0))
                                             .shadow(color: .black, radius: 4, x: 0, y: 4)
                                             .lineLimit(1)

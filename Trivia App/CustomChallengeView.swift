@@ -69,7 +69,7 @@ public struct CustomChallengeView: View {
             
             Text("\(currCat)")
                 .font(.custom("Helvetica Neue", size: 60).weight(.bold))
-                .foregroundColor(Color("accent"))
+                .foregroundColor(Color("AccentColor"))
                 .frame(width: g.size.width * 0.7)
                 .minimumScaleFactor(0.01)
             
