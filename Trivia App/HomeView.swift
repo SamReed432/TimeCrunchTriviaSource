@@ -28,6 +28,10 @@ class Views: ObservableObject {
     @Published var firstDailyInstr = false
 }
 
+enum HomeCancelID {
+    case dailyTimer
+}
+
 class SoundManager: ObservableObject {
     
     static let shared = SoundManager()
@@ -681,14 +685,14 @@ public struct HomeViewModel{
                     state.isRunningTimer = true
                     return Effect
                         .publisher(HomeViewModel.timerPublisher(state.totalTime))
-                        .cancellable(id: QuestionsModel.Identifiers.simulationCancellable)
+                        .cancellable(id: HomeCancelID.dailyTimer)
                 case .stopTimer:
                     state.isRunningTimer = false
                     return Effect.run { send in
                         await send(.cancelTimer)
                     }
                 case .cancelTimer:
-                    return .cancel(id: QuestionsModel.Identifiers.simulationCancellable)
+                    return .cancel(id: HomeCancelID.dailyTimer)
                 
                 case .setRemainingTime(let time):
                     state.totalTime = time

@@ -30,6 +30,11 @@ public struct TriviaQuestion: Codable, Equatable {
     }
 }
 
+enum CancelID {
+    case gameTimer
+    case countdown
+}
+
 let defaultTrivia = TriviaQuestion(category: "Hello", id: "Hello", correctAnswer: "Hello", incorrectAnswers: ["Hello","Hell2","Hello3"], question: TriviaQuestion.Question(text: ""), tags: ["Hello"], type: "Hello", difficulty: "Hello", regions: ["Hello1"], isNiche: false)
 
 
@@ -355,13 +360,13 @@ public struct QuestionsModel {
                     state.isRunningTimer = true
                     return Effect
                         .publisher(QuestionsModel.timerPublisher(state.totalTime))
-                        .cancellable(id: QuestionsModel.Identifiers.simulationCancellable)
+                        .cancellable(id: CancelID.gameTimer)
                 
                 case .startCountDown:
                     state.isRunningTimer = true
                     return Effect
                         .publisher(QuestionsModel.countDownPublisher())
-                        .cancellable(id: QuestionsModel.Identifiers.simulationCancellable)
+                        .cancellable(id: CancelID.countdown)
 
                 case .stopTimer:
                 sounds.game_over.play()
@@ -372,10 +377,10 @@ public struct QuestionsModel {
                 }
                 
                 case .cancelTimer:
-                    return .cancel(id: QuestionsModel.Identifiers.simulationCancellable)
+                    return .cancel(id: CancelID.gameTimer)
                 
                 case .stopCountDown:
-                    return .cancel(id: QuestionsModel.Identifiers.simulationCancellable)
+                    return .cancel(id: CancelID.countdown)
                 
                 case .setRemainingTime(let time):
                     state.remainingTime = time
@@ -733,7 +738,6 @@ public struct QuestionsView: View {
             Spacer()
         }
     }
-    
 }
 
 #Preview {
