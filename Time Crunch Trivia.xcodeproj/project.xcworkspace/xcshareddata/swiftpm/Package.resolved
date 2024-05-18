@@ -1,5 +1,5 @@
 {
-  "originHash" : "435f863c8a89327efaba1069bdd376094b024a90f88dc0766a40542dcb79fc99",
+  "originHash" : "3a92a93e301893d1d82fe0d8bbbcf0b0a58e0876ffe7cf4a667927b50806a8aa",
   "pins" : [
     {
       "identity" : "combine-schedulers",
@@ -125,15 +125,6 @@
       "state" : {
         "revision" : "d9e72f3083c08375794afa216fb2f89c0114f303",
         "version" : "1.2.1"
-      }
-    },
-    {
-      "identity" : "vungleadssdk-swiftpackagemanager",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/Vungle/VungleAdsSDK-SwiftPackageManager.git",
-      "state" : {
-        "revision" : "d76edd1de5e5855c24b3c31aa3efb23e8426aa05",
-        "version" : "7.2.2"
       }
     },
     {

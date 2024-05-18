@@ -264,7 +264,7 @@ public struct ResultsView: View {
                         ShareLink(item: shareString){
                             Label("", systemImage: "square.and.arrow.up")
                                 .font(.system(size: 40))
-                                .minimumScaleFactor(0.01)
+                                .minimumScaleFactor(0.01) 
                                 .frame(height: 50, alignment:.bottom)
                         }
                             .font(.largeTitle)
@@ -277,7 +277,7 @@ public struct ResultsView: View {
                     Spacer()
                     
                 }
-                .frame(width: 400)
+                .frame(width: 400) 
                 .padding(.top, 70)
                 
                 Spacer()

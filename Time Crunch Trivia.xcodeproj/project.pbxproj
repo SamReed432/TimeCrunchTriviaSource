@@ -29,7 +29,6 @@
 		22D48B0B2BCF45110000893C /* game_over.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 22D48B0A2BCF45110000893C /* game_over.mp3 */; };
 		22D48B0F2BCF4B3E0000893C /* wrong.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 22D48B0E2BCF4B3E0000893C /* wrong.mp3 */; };
 		22FD9EE92B5AF3A00019DF19 /* StoredData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22FD9EE82B5AF3A00019DF19 /* StoredData.swift */; };
-		22FD9EEC2B5B61040019DF19 /* VungleAdsSDK in Frameworks */ = {isa = PBXBuildFile; productRef = 22FD9EEB2B5B61040019DF19 /* VungleAdsSDK */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -65,7 +64,6 @@
 			files = (
 				223129032B844068009B03EF /* GoogleMobileAds in Frameworks */,
 				224D85C72B3A05EA00AFA4F3 /* ComposableArchitecture in Frameworks */,
-				22FD9EEC2B5B61040019DF19 /* VungleAdsSDK in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -167,7 +165,6 @@
 			name = "Time Crunch Trivia";
 			packageProductDependencies = (
 				224D85C62B3A05EA00AFA4F3 /* ComposableArchitecture */,
-				22FD9EEB2B5B61040019DF19 /* VungleAdsSDK */,
 				223129022B844068009B03EF /* GoogleMobileAds */,
 			);
 			productName = "Trivia App";
@@ -200,7 +197,6 @@
 			mainGroup = 224D85A92B3A05A000AFA4F3;
 			packageReferences = (
 				224D85C52B3A05EA00AFA4F3 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */,
-				22FD9EEA2B5B61040019DF19 /* XCRemoteSwiftPackageReference "VungleAdsSDK-SwiftPackageManager" */,
 				223129012B844068009B03EF /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */,
 			);
 			productRefGroup = 224D85B32B3A05A000AFA4F3 /* Products */;
@@ -494,14 +490,6 @@
 				minimumVersion = 1.5.6;
 			};
 		};
-		22FD9EEA2B5B61040019DF19 /* XCRemoteSwiftPackageReference "VungleAdsSDK-SwiftPackageManager" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/Vungle/VungleAdsSDK-SwiftPackageManager.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 7.2.1;
-			};
-		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -514,11 +502,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 224D85C52B3A05EA00AFA4F3 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */;
 			productName = ComposableArchitecture;
-		};
-		22FD9EEB2B5B61040019DF19 /* VungleAdsSDK */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 22FD9EEA2B5B61040019DF19 /* XCRemoteSwiftPackageReference "VungleAdsSDK-SwiftPackageManager" */;
-			productName = VungleAdsSDK;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
