@@ -194,15 +194,15 @@ public struct HomeView: View {
                                     PopUpView(geometry: g)
                                 }
                         }
+                        VStack {
+                            Spacer()
+                            BannerAdView(adUnitID: "ca-app-pub-4151998780971734/4463157793")
+                                .frame(maxWidth: .infinity) //g.size.width * 0.95)
+                                .frame(height: g.size.height * 0.1)
+                                .padding(.bottom, -g.size.height * 0.01)
+                        }
                     }
                     
-                    VStack {
-                        Spacer()
-                        BannerAdView(adUnitID: "ca-app-pub-4151998780971734/4463157793")
-                            .frame(maxWidth: .infinity) //g.size.width * 0.95)
-                            .frame(height: g.size.height * 0.1)
-                            .padding(.bottom, -g.size.height * 0.01)
-                    }
 
                 }
             }
