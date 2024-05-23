@@ -407,7 +407,6 @@ public struct HomeView: View {
                 }
                 
                 Spacer()
-                Spacer()
             }
             .background(Image("Background Image").resizable().scaledToFill().frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height).edgesIgnoringSafeArea(.all))
                 
