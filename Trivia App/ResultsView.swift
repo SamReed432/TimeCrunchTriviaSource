@@ -212,18 +212,18 @@ public struct ResultsView: View {
                     
                     VStack {
                         Button("", systemImage: "house") {
-//                            if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-//                               let window = windowScene.windows.first {
-//                                if let rootViewController = window.rootViewController {
-//                                    if let interstitial = interstitial {
-//                                        interstitial.present(fromRootViewController: rootViewController)
-//                                    } else {
-//                                        print("Interstitial ad wasn't ready")
-//                                    }
-//                                }
-//                            } else {
-//                                print("No window scene found")
-//                            }
+                            if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+                               let window = windowScene.windows.first {
+                                if let rootViewController = window.rootViewController {
+                                    if let interstitial = interstitial {
+                                        interstitial.present(fromRootViewController: rootViewController)
+                                    } else {
+                                        print("Interstitial ad wasn't ready")
+                                    }
+                                }
+                            } else {
+                                print("No window scene found")
+                            }
                             self.views.stacked = false
                             self.views.dailyStacked = false
                             self.views.categoriesStacked = false

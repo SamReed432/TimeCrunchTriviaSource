@@ -33,6 +33,41 @@ enum HomeCancelID {
     case dailyTimer
 }
 
+struct BannerAdView: UIViewRepresentable {
+    var adUnitID: String = "ca-app-pub-3940256099942544/2934735716" // Test ad unit ID provided by Google
+
+    func makeCoordinator() -> Coordinator {
+        return Coordinator()
+    }
+
+    func makeUIView(context: Context) -> GADBannerView {
+        let bannerView = GADBannerView(adSize: GADAdSizeBanner)
+        bannerView.adUnitID = adUnitID
+        
+        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+           let rootViewController = windowScene.windows.first?.rootViewController {
+            bannerView.rootViewController = rootViewController
+        }
+        
+        bannerView.delegate = context.coordinator
+        bannerView.load(GADRequest())
+        return bannerView
+    }
+
+    func updateUIView(_ uiView: GADBannerView, context: Context) {}
+
+    class Coordinator: NSObject, GADBannerViewDelegate {
+        func bannerViewDidReceiveAd(_ bannerView: GADBannerView) {
+            print("Banner loaded successfully")
+        }
+
+        func bannerView(_ bannerView: GADBannerView, didFailToReceiveAdWithError error: Error) {
+            print("Failed to load banner ad with error: \(error.localizedDescription)")
+        }
+    }
+}
+
+
 class SoundManager: ObservableObject {
     
     static let shared = SoundManager()
@@ -158,6 +193,13 @@ public struct HomeView: View {
                                 .fullScreenCover(isPresented: $views.isSheetPresented) {
                                     PopUpView(geometry: g)
                                 }
+                        }
+                        VStack {
+                            Spacer()
+                            BannerAdView(adUnitID: "ca-app-pub-4151998780971734/4463157793")
+                                .frame(maxWidth: .infinity) //g.size.width * 0.95)
+                                .frame(height: g.size.height * 0.1)
+                                .padding(.bottom, -g.size.height * 0.01)
                         }
                     }
                     
@@ -406,6 +448,7 @@ public struct HomeView: View {
                     CategoriesView()
                 }
                 
+                Spacer()
                 Spacer()
             }
             .background(Image("Background Image").resizable().scaledToFill().frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height).edgesIgnoringSafeArea(.all))
