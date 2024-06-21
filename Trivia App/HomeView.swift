@@ -196,7 +196,7 @@ public struct HomeView: View {
                         }
                         VStack {
                             Spacer()
-                            BannerAdView(adUnitID: "ca-app-pub-4151998780971734/4463157793")
+                            BannerAdView(adUnitID: "ca-app-pub-6778163388475279/9998521084")
                                 .frame(maxWidth: .infinity) //g.size.width * 0.95)
                                 .frame(height: g.size.height * 0.1)
                                 .padding(.bottom, -g.size.height * 0.01)

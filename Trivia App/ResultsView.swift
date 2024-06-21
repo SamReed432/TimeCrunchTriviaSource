@@ -15,7 +15,7 @@ public struct ResultsView: View {
     @EnvironmentObject var views: Views
     
     let store: StoreOf<QuestionsModel>
-    private let adUnitID = "ca-app-pub-4151998780971734/2286845814"
+    private let adUnitID = "ca-app-pub-6778163388475279/3010101593"
     
     let shareString: String
     
