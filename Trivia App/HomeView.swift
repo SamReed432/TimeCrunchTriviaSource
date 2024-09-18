@@ -269,7 +269,7 @@ public struct HomeView: View {
                         //They can play the daily -- store the current date
                         Button(action: {
                             sounds.select.play()
-                            viewStore.send(.stopTimer)
+//                            viewStore.send(.stopTimer)
                             
                             if (seenDailyInstrs){
                                 views.dailyStacked = true
