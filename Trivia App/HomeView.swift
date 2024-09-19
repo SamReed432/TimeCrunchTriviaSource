@@ -261,10 +261,10 @@ public struct HomeView: View {
 //                                      DEBUG TEXT:
 //                                      Text("\(lastPlayedDailyDay):\(lastPlayedDailyMonth):\(lastPlayedDailyYear)")
                     
-                    if (
-                        (dayNumber > lastPlayedDailyDay && monthNumber >= lastPlayedDailyMonth && yearNumber >= lastPlayedDailyYear) ||
-                        (monthNumber > lastPlayedDailyMonth && yearNumber >= lastPlayedDailyYear) ||
-                        (yearNumber > lastPlayedDailyYear)
+                    if (true
+//                        (dayNumber > lastPlayedDailyDay && monthNumber >= lastPlayedDailyMonth && yearNumber >= lastPlayedDailyYear) ||
+//                        (monthNumber > lastPlayedDailyMonth && yearNumber >= lastPlayedDailyYear) ||
+//                        (yearNumber > lastPlayedDailyYear)
                     ){
                         //They can play the daily -- store the current date
                         Button(action: {
@@ -278,8 +278,11 @@ public struct HomeView: View {
                             } else {
                                 views.firstDailyInstr = true
                                 seenDailyInstrs = true
+                                views.isGearPresented = false
+                                views.isQuestionPresented = false
                             }
-                        }) {
+                        }
+                                ) {
                             Text("Daily Challenge: \(views.dailyCategory)")
                                 .font(.custom("Helvetica Neue", size: 300).weight(.bold))
                                 .fontWeight(.bold)

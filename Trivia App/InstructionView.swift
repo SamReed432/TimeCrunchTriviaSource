@@ -54,8 +54,7 @@ public struct InstructionView: View {
                                     .padding(.horizontal, 10)
                                 Button {
                                     views.firstDailyInstr = false
-                                    views.dailyStacked = true
-                                    views.isGearPresented = false
+//                                    views.dailyStacked = true
                                 } label: {
                                     HStack {
                                         Spacer()

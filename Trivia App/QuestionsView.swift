@@ -202,6 +202,7 @@ public struct QuestionsModel {
                 .autoconnect()
                 .map { _ in
                     remainingTime -= 1
+                    print(remainingTime)
                     return remainingTime > 0 ? .setCountDownTime(remainingTime) : .startGame
                 }
                 .eraseToAnyPublisher()
@@ -239,7 +240,7 @@ public struct QuestionsModel {
                     
                     return Effect.run { send in
                         await send(.startCountDown)
-                        await send(.getQuestion, animation: .easeInOut(duration: 0.5))
+                        await send(.setNextQuestion)
                     }
                 case .answer(let answer):
                     state.fractionComplete = 1.0
@@ -348,6 +349,7 @@ public struct QuestionsModel {
                     state.isAnimationInProgress = false
                 
                     return .none
+                
                 case .appendSavedQuestions(let questions):
                     state.savedQuestions.append(contentsOf: questions)
                     return Effect.run { send in
@@ -741,7 +743,7 @@ public struct QuestionsView: View {
 }
 
 #Preview {
-    let previewState = QuestionsModel.State(totalTime: 60, daily: false, category: "")
+    let previewState = QuestionsModel.State(totalTime: 60, daily: true, category: "")
     return QuestionsView(
         store: Store(
             initialState: previewState,
