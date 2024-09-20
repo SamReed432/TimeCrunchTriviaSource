@@ -261,10 +261,10 @@ public struct HomeView: View {
 //                                      DEBUG TEXT:
 //                                      Text("\(lastPlayedDailyDay):\(lastPlayedDailyMonth):\(lastPlayedDailyYear)")
                     
-                    if (true
-//                        (dayNumber > lastPlayedDailyDay && monthNumber >= lastPlayedDailyMonth && yearNumber >= lastPlayedDailyYear) ||
-//                        (monthNumber > lastPlayedDailyMonth && yearNumber >= lastPlayedDailyYear) ||
-//                        (yearNumber > lastPlayedDailyYear)
+                    if (/*true*/
+                        (dayNumber > lastPlayedDailyDay && monthNumber >= lastPlayedDailyMonth && yearNumber >= lastPlayedDailyYear) ||
+                        (monthNumber > lastPlayedDailyMonth && yearNumber >= lastPlayedDailyYear) ||
+                        (yearNumber > lastPlayedDailyYear)
                     ){
                         //They can play the daily -- store the current date
                         Button(action: {
