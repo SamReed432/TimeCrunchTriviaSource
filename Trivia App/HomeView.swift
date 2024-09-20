@@ -112,9 +112,6 @@ public struct HomeView: View {
     
     let store: StoreOf<HomeViewModel>
     
-    @AppStorage("lastPlayedDailyDay") var lastPlayedDailyDay: Int = 0
-    @AppStorage("lastPlayedDailyMonth") var lastPlayedDailyMonth: Int = 0
-    @AppStorage("lastPlayedDailyYear") var lastPlayedDailyYear: Int = 0
     @AppStorage("seenDailyInstrs") var seenDailyInstrs: Bool = false
     
     
@@ -249,23 +246,10 @@ public struct HomeView: View {
                 
                 HStack{
                     Spacer()
-                    
-                    
-                    let calendar = Calendar.current
-                    let currentDate = Date()
-                    
-                    let dayNumber = calendar.component(.day, from: currentDate)
-                    let monthNumber = calendar.component(.month, from: currentDate)
-                    let yearNumber = calendar.component(.year, from: currentDate)
-                    
 //                                      DEBUG TEXT:
 //                                      Text("\(lastPlayedDailyDay):\(lastPlayedDailyMonth):\(lastPlayedDailyYear)")
                     
-                    if (/*true*/
-                        (dayNumber > lastPlayedDailyDay && monthNumber >= lastPlayedDailyMonth && yearNumber >= lastPlayedDailyYear) ||
-                        (monthNumber > lastPlayedDailyMonth && yearNumber >= lastPlayedDailyYear) ||
-                        (yearNumber > lastPlayedDailyYear)
-                    ){
+                    if ( canPlayDailyChallenge() ){
                         //They can play the daily -- store the current date
                         Button(action: {
                             sounds.select.play()
@@ -322,6 +306,9 @@ public struct HomeView: View {
                                     Text("New Daily Challenge: \(String(viewStore.totalTime / 3600)):\(String(format: "%02d", (viewStore.totalTime % 3600) / 60)):\(String(format: "%02d", viewStore.totalTime % 60))")
                                         .onAppear {
                                             viewStore.send(.startTimer)
+                                        }
+                                        .onDisappear {
+                                            viewStore.send(.stopTimer)
                                         }
                                     .lineLimit(1)
                                     
@@ -755,6 +742,39 @@ func formatCategoryName(_ categoryName: String) -> String {
     let components = categoryName.components(separatedBy: "_")
     let formattedCategoryName = components.joined(separator: " ")
     return formattedCategoryName
+}
+
+func canPlayDailyChallenge() -> Bool {
+    let calendar = Calendar.current
+    let currentDate = Date()
+    
+    @AppStorage("lastPlayedDailyDay") var lastPlayedDailyDay: Int = 0
+    @AppStorage("lastPlayedDailyMonth") var lastPlayedDailyMonth: Int = 0
+    @AppStorage("lastPlayedDailyYear") var lastPlayedDailyYear: Int = 0
+
+    // Create a DateComponents for the last played date
+    var lastPlayedDateComponents = DateComponents()
+    lastPlayedDateComponents.year = lastPlayedDailyYear
+    lastPlayedDateComponents.month = lastPlayedDailyMonth
+    lastPlayedDateComponents.day = lastPlayedDailyDay
+    
+    let dayNumber = calendar.component(.day, from: currentDate)
+    let monthNumber = calendar.component(.month, from: currentDate)
+    let yearNumber = calendar.component(.year, from: currentDate)
+
+    // Convert components into a Date object
+    if let lastPlayedDate = calendar.date(from: lastPlayedDateComponents) {
+        return ((dayNumber > lastPlayedDateComponents.day! && monthNumber >= lastPlayedDateComponents.month! && yearNumber >= lastPlayedDateComponents.year!) ||
+                (monthNumber > lastPlayedDateComponents.month! && yearNumber >= lastPlayedDateComponents.year!) ||
+                (yearNumber > lastPlayedDateComponents.year!)
+        )
+    }
+//    
+//    dayNumber > lastPlayedDailyDay && monthNumber >= lastPlayedDailyMonth && yearNumber >= lastPlayedDailyYear) ||
+//                            (monthNumber > lastPlayedDailyMonth && yearNumber >= lastPlayedDailyYear) ||
+//                            (yearNumber > lastPlayedDailyYear) ||
+    
+    return true // Default to true if date conversion fails
 }
 
 

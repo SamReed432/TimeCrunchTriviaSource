@@ -170,6 +170,7 @@ public struct QuestionsModel {
         case stopCountDown
         case showResults
         case cancelTimer
+        case cancelCountDownTimer
     }
 
     enum Identifiers: Hashable, CaseIterable {
@@ -202,8 +203,8 @@ public struct QuestionsModel {
                 .autoconnect()
                 .map { _ in
                     remainingTime -= 1
-                    print(remainingTime)
-                    return remainingTime > 0 ? .setCountDownTime(remainingTime) : .startGame
+                    print("remaining time")
+                    return remainingTime > 0 ? .setCountDownTime(remainingTime) : .stopCountDown
                 }
                 .eraseToAnyPublisher()
         }
@@ -371,18 +372,24 @@ public struct QuestionsModel {
                         .cancellable(id: CancelID.countdown)
 
                 case .stopTimer:
-                sounds.game_over.play()
+                    sounds.game_over.play()
                     state.isRunningTimer = false
-                return Effect.run { send in
-                    await send(.cancelTimer)
-                    await send(.showResults)
-                }
+                    return Effect.run { send in
+                        await send(.cancelTimer)
+                        await send(.showResults)
+                    }
+                    
+                case .cancelCountDownTimer:
+                    return .cancel(id: CancelID.countdown)
                 
                 case .cancelTimer:
                     return .cancel(id: CancelID.gameTimer)
                 
                 case .stopCountDown:
-                    return .cancel(id: CancelID.countdown)
+                return Effect.run { send in
+                    await send(.cancelCountDownTimer)
+                    await send(.startGame)
+                }
                 
                 case .setRemainingTime(let time):
                     state.remainingTime = time
@@ -394,7 +401,6 @@ public struct QuestionsModel {
                 case .startGame:
                     state.gameRunning = true
                     return Effect.run { send in
-                        await send(.stopCountDown)
                         await send(.startTimer, animation: .easeInOut(duration: 0.5))
                     }
                 case .showResults:
