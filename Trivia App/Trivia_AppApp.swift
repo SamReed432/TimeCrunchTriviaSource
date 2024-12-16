@@ -8,6 +8,7 @@
 import SwiftUI
 import UserNotifications
 import GoogleMobileAds
+import CoreData
 
 @main
 struct Trivia_AppApp: App {

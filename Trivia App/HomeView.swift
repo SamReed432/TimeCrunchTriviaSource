@@ -27,6 +27,8 @@ class Views: ObservableObject {
     @Published var prevResults = false
     @Published var instructionsShown = false
     @Published var firstDailyInstr = false
+    @Published var statsShown = false
+    @Published var statIconShown = true
 }
 
 enum HomeCancelID {
@@ -163,6 +165,30 @@ public struct HomeView: View {
                                 }
                                 .fullScreenCover(isPresented: $views.instructionsShown) {
                                     PopUpInstrs(geometry: g)
+                                }
+                        }
+                    }
+                    if views.statIconShown {
+                        ZStack {
+                            Rectangle()
+                                .foregroundColor(Color.clear)
+                                .frame(width: 50, height: 50)
+                                .position(x: g.size.width * 0.15, y: g.size.height * 0.04)
+                                .onTapGesture {
+                                    sounds.select.play()
+                                    views.instructionsShown = true
+                                }
+                            Image(systemName: "chart.bar.xaxis")
+                                .position(x: g.size.width * 0.25, y: g.size.height * 0.04)
+                                .font(.largeTitle)
+                                .foregroundColor(Color.gray)
+                                .opacity(0.5)
+                                .onTapGesture {
+                                    sounds.select.play()
+                                    views.statsShown = true
+                                }
+                                .fullScreenCover(isPresented: $views.statsShown) {
+                                    StatsView()
                                 }
                         }
                     }
@@ -622,6 +648,7 @@ public struct HomeView: View {
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(Image("Background Image").resizable().scaledToFill().frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height).edgesIgnoringSafeArea(.all))
         }
+    
 
     func horizontalContent(
         geometry g: GeometryProxy

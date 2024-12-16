@@ -10,15 +10,57 @@ import ComposableArchitecture
 import GoogleMobileAds
 import SwiftData
 
+struct GameResult: Codable, Identifiable {
+    let id: UUID
+    let date: Date
+    let correctAnswers: Int
+    let totalQuestions: Int
+    let isDaily: Bool
+    let category: String
+}
+
+
 public struct ResultsView: View {
     
     @EnvironmentObject var views: Views
     
+    @AppStorage("game_results") private var gameResultsData: Data = Data()
+
+    private var gameResults: [GameResult] {
+        guard !gameResultsData.isEmpty,
+              let decoded = try? JSONDecoder().decode([GameResult].self, from: gameResultsData) else {
+            return []
+        }
+        return decoded
+    }
+
+    private func updateGameResults(_ newValue: [GameResult]) {
+        if let encoded = try? JSONEncoder().encode(newValue) {
+            gameResultsData = encoded
+        }
+    }
+
+    private func saveGameResult(correctAnswers: Int, totalQuestions: Int, isDaily: Bool, category: String) {
+        let newResult = GameResult(
+            id: UUID(),
+            date: Date(),
+            correctAnswers: correctAnswers,
+            totalQuestions: totalQuestions,
+            isDaily: isDaily,
+            category: category
+        )
+        var results = gameResults
+        results.append(newResult)
+        updateGameResults(results)
+    }
+
     let store: StoreOf<QuestionsModel>
     private let adUnitID = "ca-app-pub-6778163388475279/3010101593"
     
     let shareString: String
-    
+    @AppStorage("dailies_played") var dailiesPlayed: Int = 0
+    @AppStorage("total_daily_score") var total_daily_score: Int = 0
+ 
     @State private var interstitial: GADInterstitialAd?
     private let interstitialDelegate = InterstitialDelegate()
     
@@ -28,6 +70,9 @@ public struct ResultsView: View {
         ) {
             self.store = store
             self.shareString = shareString
+            
+            dailiesPlayed += 1;
+            
         }
 
     public var body: some View {
@@ -49,10 +94,10 @@ public struct ResultsView: View {
         .navigationViewStyle(StackNavigationViewStyle())
         .navigationBarBackButtonHidden(true)
         .onAppear {
-                    requestNotificationPermissions()
-                    cancelNotificationIfNeeded()
-                    fetchTomorrowCategory()
-                    loadInterstitialAd()
+                requestNotificationPermissions()
+                cancelNotificationIfNeeded()
+                fetchTomorrowCategory()
+                loadInterstitialAd()
                 }
     }
     
@@ -161,7 +206,6 @@ public struct ResultsView: View {
             }
         }
 
-
     func verticalContent(
         geometry g: GeometryProxy
     ) -> some View {
@@ -206,6 +250,19 @@ public struct ResultsView: View {
                 
                 Spacer()
                 
+                
+                if (viewStore.state.daily) {
+                    HStack {
+                        HStack {
+                            Text("Daily Average: \(((total_daily_score / 10) / dailiesPlayed))")
+                                .onAppear{
+                                    total_daily_score += viewStore.state.cNum
+                                }
+                                .font(.system(size: 40))
+                        }
+                    }
+                }
+                
                 HStack{
                     
                     Spacer()
@@ -240,15 +297,19 @@ public struct ResultsView: View {
                         .onAppear{
                             
                             if (viewStore.state.daily) {
-                            @AppStorage("score_saved") var scoreSaved: Bool = false
-                            @AppStorage("saved_cNum") var savedcNum: Int = 0
-                            @AppStorage("saved_qNum") var savedqNum: Int = 0
-                            @AppStorage("saved_shareString") var savedShareString: String = ""
+                                @AppStorage("score_saved") var scoreSaved: Bool = false
+                                @AppStorage("saved_cNum") var savedcNum: Int = 0
+                                @AppStorage("saved_qNum") var savedqNum: Int = 0
+                                @AppStorage("saved_shareString") var savedShareString: String = ""
+                                
+                                savedcNum = viewStore.state.cNum
+                                savedqNum = viewStore.state.qNum
+                                scoreSaved = true
+                                savedShareString = self.shareString
+                            }
                             
-                            savedcNum = viewStore.state.cNum
-                            savedqNum = viewStore.state.qNum
-                            scoreSaved = true
-                            savedShareString = self.shareString}
+                            saveGameResult(correctAnswers: viewStore.state.cNum, totalQuestions: viewStore.state.qNum, isDaily: viewStore.state.daily, category: viewStore.state.category)
+                            
                         }
                         
                         Text("Home")
@@ -319,7 +380,7 @@ class InterstitialDelegate: NSObject, GADFullScreenContentDelegate {
 
 
 #Preview {
-    let previewState = QuestionsModel.State(totalTime: 60, daily: false, category: "")
+    let previewState = QuestionsModel.State(totalTime: 60, daily: true, category: "")
     return ResultsView(
         store: Store(
             initialState: previewState,

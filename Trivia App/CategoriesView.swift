@@ -113,9 +113,7 @@ public struct CategoriesView: View {
                         
                         Spacer()
                     }
-                    
                     Spacer()
-                    
                 }
             }
         }
