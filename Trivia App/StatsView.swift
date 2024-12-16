@@ -227,7 +227,7 @@ extension StatsView {
                     Image(systemName: "circle.fill")
                     VStack(alignment: .leading) {
                         Text("Date: \(result.date.formatted())")
-                        Text("Score: \(result.correctAnswers)/\(result.totalQuestions)")
+                        Text("Score: \(result.correctAnswers)/\(result.totalQuestions)")
                         if result.isDaily {
                             Text("Daily Challenge")
                                 .font(.footnote)
