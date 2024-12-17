@@ -287,7 +287,7 @@ public struct ResultsView: View {
                             self.views.customStacked = false
                             self.views.resultsViewShown = false
                             self.views.isGearPresented = true
-                            self.views.statIconShown = false
+                            self.views.statIconShown = true
                             self.views.isQuestionPresented = true
                             self.views.instructionsShown = false
                             self.views.firstDailyInstr = false

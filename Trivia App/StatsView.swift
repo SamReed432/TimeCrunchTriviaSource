@@ -65,7 +65,7 @@ extension StatsView {
         let dailyResults = gameResults.filter { $0.isDaily }
         guard !dailyResults.isEmpty else { return 0 }
         let totalScore = dailyResults.reduce(0) { $0 + $1.correctAnswers }
-        return Double(totalScore) / Double(dailyResults.count) * 100
+        return Double(totalScore) / Double(dailyResults.count) * 10
     }
     
     private func calculateOverallAccuracy() -> Double {
@@ -149,8 +149,11 @@ extension StatsView {
     private func statsSummaryView(geometry: GeometryProxy) -> some View {
         VStack {
             HStack {
+                Spacer()
                 summaryColumn(title: "Daily Average:", value: String(format: "%.1f%%", calculateDailyAverage()))
+                Spacer()
                 summaryColumn(title: "Dailies Played:", value: "\(gameResults.filter(\.isDaily).count)")
+                Spacer()
             }
                 .padding(.vertical)
                 .frame(width: geometry.size.width * 0.95)
@@ -161,8 +164,11 @@ extension StatsView {
                         .stroke(Color.white, lineWidth: 4)
                 )
             HStack {
+                Spacer()
                 summaryColumn(title: "Overall Accuracy:", value: String(format: "%.1f%%", calculateOverallAccuracy()))
+                Spacer()
                 summaryColumn(title: "Games Played:", value: "\(gameResults.count)")
+                Spacer()
             }
                 .padding(.vertical)
                 .frame(width: geometry.size.width * 0.95)
