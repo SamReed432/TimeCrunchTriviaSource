@@ -168,6 +168,7 @@ public struct HomeView: View {
                                 }
                         }
                     }
+                    
                     if views.statIconShown {
                         ZStack {
                             Rectangle()
@@ -179,7 +180,7 @@ public struct HomeView: View {
                                     views.instructionsShown = true
                                 }
                             Image(systemName: "chart.bar.xaxis")
-                                .position(x: g.size.width * 0.25, y: g.size.height * 0.04)
+                                .position(x: g.size.width * 0.30, y: g.size.height * 0.04)
                                 .font(.largeTitle)
                                 .foregroundColor(Color.gray)
                                 .opacity(0.5)
@@ -285,11 +286,13 @@ public struct HomeView: View {
                                 views.dailyStacked = true
                                 views.isGearPresented = false
                                 views.isQuestionPresented = false
+                                views.statIconShown = false
                             } else {
                                 views.firstDailyInstr = true
                                 seenDailyInstrs = true
                                 views.isGearPresented = false
                                 views.isQuestionPresented = false
+                                views.statIconShown = false
                             }
                         }
                                 ) {
@@ -394,6 +397,7 @@ public struct HomeView: View {
                         viewStore.send(.stopTimer)
                         views.stacked = true
                         views.isGearPresented = false
+                        views.statIconShown = false
                         views.isQuestionPresented = false
                     }) {
                         Text("1 Minute Challenge")
@@ -436,6 +440,7 @@ public struct HomeView: View {
                         viewStore.send(.stopTimer)
                         views.categoriesStacked = true
                         views.isGearPresented = false
+                        views.statIconShown = false
                         views.isQuestionPresented = false
                     }) {
                         Text("Categories")
