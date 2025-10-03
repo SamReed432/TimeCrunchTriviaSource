@@ -670,7 +670,7 @@ struct catResponse: Decodable {
 
 
 func fetchDailyCat() async throws -> String {
-    let url = URL(string: "https://us-east-1.aws.data.mongodb-api.com/app/data-viaqs/endpoint/get_daily_cat")!
+    let url = URL(string: "https://tct.reedserver.com/get_daily_cat")!
 
     let (data, _) = try await URLSession.shared.data(from: url)
 

@@ -276,7 +276,7 @@ public struct QuestionsModel {
                     state.isFetching = true
                     var apiUrlString = ""
                     if (state.daily) {
-                        apiUrlString = "https://us-east-1.aws.data.mongodb-api.com/app/data-viaqs/endpoint/get_daily"
+                        apiUrlString = "https://tct.reedserver.com/get_daily"
                     } else {
                         apiUrlString = "https://the-trivia-api.com/v2/questions"
                     }

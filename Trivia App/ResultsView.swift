@@ -113,27 +113,29 @@ public struct ResultsView: View {
     }
     
     private func fetchTomorrowCategory() {
-        guard let url = URL(string: "https://us-east-1.aws.data.mongodb-api.com/app/data-viaqs/endpoint/get_tomorrow_cat") else {
+        guard let url = URL(string: "https://tct.reedserver.com/get_tomorrow_cat") else {
             print("Invalid URL")
             return
         }
-        
+
         let task = URLSession.shared.dataTask(with: url) { data, response, error in
             guard let data = data, error == nil else {
                 print("Failed to fetch tomorrow's category: \(error?.localizedDescription ?? "Unknown error")")
                 return
             }
-            
-            if let tomorrowCategory = String(data: data, encoding: .utf8) {
-                // Remove surrounding quotations
-                let trimmedCategory = tomorrowCategory.trimmingCharacters(in: CharacterSet(charactersIn: "\""))
-                print("Tomorrow's category:", trimmedCategory)
-                scheduleNotificationForNextDay(category: trimmedCategory)
-            } else {
-                print("Failed to parse tomorrow's category")
+
+            do {
+                let decoded = try JSONDecoder().decode(catResponse.self, from: data)
+                let tomorrowCategory = decoded.catName
+                    .replacingOccurrences(of: "_", with: " ")
+                    .capitalized
+                print("Tomorrow's category:", tomorrowCategory)
+                scheduleNotificationForNextDay(category: tomorrowCategory)
+            } catch {
+                print("Failed to decode tomorrow's category:", error)
             }
         }
-        
+
         task.resume()
     }
 
