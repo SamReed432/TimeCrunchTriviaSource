@@ -150,6 +150,7 @@ public struct PrevResultsView: View {
         .foregroundStyle(Color.white)
         .fontWeight(.heavy)
     }
+
 }
 
 #Preview {
