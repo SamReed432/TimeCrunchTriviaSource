@@ -256,7 +256,7 @@ public struct ResultsView: View {
                 if (viewStore.state.daily) {
                     HStack {
                         HStack {
-                            Text("Daily Average: \(calculateDailyAverage())")
+                            Text("Daily Average: \(calculateDailyAverage())%")
                                 .onAppear{
                                     total_daily_score += viewStore.state.cNum
                                 }
@@ -370,11 +370,11 @@ public struct ResultsView: View {
         }
     }
     
-    private func calculateDailyAverage() -> Double {
+    private func calculateDailyAverage() -> Int {
         let dailyResults = gameResults.filter { $0.isDaily }
         guard !dailyResults.isEmpty else { return 0 }
         let totalScore = dailyResults.reduce(0) { $0 + $1.correctAnswers }
-        return Double(totalScore) / Double(dailyResults.count) * 10
+        return Int(Double(totalScore) / Double(dailyResults.count) * 10)
     }
 }
    
